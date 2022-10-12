@@ -17,23 +17,22 @@ resource aws_ecs_cluster "this" {
   # Cluster Configuration: The execute command configuration
   dynamic "configuration" {
     for_each = var.enable_execute_command_configuration ? [1] : []
-
     content {
       # Execute Command Configuration
       execute_command_configuration {
-        kms_key_id = try(var.execute_command_configurations.kms_key_id, null)
-        logging    = try(var.execute_command_configurations.logging, "DEFAULT")
+        kms_key_id = lookup(var.execute_command_configurations, "kms_key_id", null)
+        logging    = lookup(var.execute_command_configurations, "logging", "DEFAULT")
         
         # Logging Configuration for redirecting the log for Execute command results
         dynamic "log_configuration" {
-              for_each = try([var.execute_command_configurations.log_configuration], {})
+              for_each = [lookup(var.execute_command_configurations, "log_configuration", {})]
 
               content {
-                cloud_watch_encryption_enabled = try(log_configuration.value.cloud_watch_encryption_enabled, null)
-                cloud_watch_log_group_name     = try(log_configuration.value.cloud_watch_log_group_name, null)
-                s3_bucket_name                 = try(log_configuration.value.s3_bucket_name, null)
-                s3_bucket_encryption_enabled   = try(log_configuration.value.s3_bucket_encryption_enabled, null)
-                s3_key_prefix                  = try(log_configuration.value.s3_key_prefix, null)
+                cloud_watch_encryption_enabled = lookup(log_configuration.value, "cloud_watch_encryption_enabled", null)
+                cloud_watch_log_group_name     = lookup(log_configuration.value, "cloud_watch_log_group_name", null)
+                s3_bucket_name                 = lookup(log_configuration.value, "s3_bucket_name", null)
+                s3_bucket_encryption_enabled   = lookup(log_configuration.value, "s3_bucket_encryption_enabled", null)
+                s3_key_prefix                  = lookup(log_configuration.value, "s3_key_prefix", null)
               }
             }
       }
