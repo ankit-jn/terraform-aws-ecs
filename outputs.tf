@@ -4,8 +4,14 @@ output "ecs_cluster_arn" {
 }
 
 output "asg" {
-  description = "The ID/ARN of the ECS cluster"
-  value = { for key, asg in module.asg : key => asg.arn }
+  description = "Details of ASGs for Capacity Providers"
+  value = { for key, asg in module.asg : 
+              key => {
+                        arn = asg.arn 
+                        launch_template = asg.launch_template
+                        instance_profile_arn = asg.instance_profile_arn
+                        instance_profile_role_arn = asg.instance_profile_role_arn
+                    }}
 }
 
 output "ecs_task_role" {

@@ -25,11 +25,17 @@ module "ecs_cluster" {
 module "asg" {
     for_each = var.create_ecs_cluster ? {for asg in var.auto_scaling_groups : asg.name => asg } : {}
 
-    source = "git::https://github.com/arjstack/terraform-aws-asg.git"
+    source = "git::https://github.com/arjstack/terraform-aws-asg.git?ref=development"
     
     name = each.key
-    
+    create_instance_profile = lookup(each.value, "create_instance_profile", false)
+    min_size = each.value.min_size
+    max_size = each.value.max_size
+    vpc_zone_identifier = each.value.vpc_zone_identifier
+    instance_type = each.value.instance_type
+    image_id = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami[each.key].value)["image_id"]
 }
+
 
 # ECS Task Roles
 module "iam_ecs_task" {
@@ -57,8 +63,8 @@ module "ecs_service" {
     
     container_configurations = var.container_configurations
 
-    ecs_task_execution_role_arn = module.iam_ecs_task.service_linked_roles["ecs-task-execution"]
-    ecs_task_role_arn           = module.iam_ecs_task.service_linked_roles["ecs-task"]
+    ecs_task_execution_role_arn = module.iam_ecs_task.service_linked_roles["ecs-task-execution"].arn
+    ecs_task_role_arn           = module.iam_ecs_task.service_linked_roles["ecs-task"].arn
     
     create_service_log_group    = var.create_service_log_group
     log_group_retention         = var.log_group_retention

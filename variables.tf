@@ -82,7 +82,18 @@ EOF
 }
 
 variable "auto_scaling_groups" {
-  description = "Auto Scaling Groups used with Autoscaling Capacity Providers"
+  description = <<EOF
+Auto Scaling Groups used with Autoscaling Capacity Providers
+List of Auto Scaling Groups where each entry is a map of following properties:
+
+name: The Name of ASG
+instance_type: The type of the instance.
+min_size = Minimum size of the Auto Scaling Group.
+max_size = Maximum size of the Auto Scaling Group.
+vpc_zone_identifier = List of subnet IDs to launch resources in.
+ssm_parameter_image = The name of the SSM parameter for retrieving the image. (default `/aws/service/ecs/optimized-ami/amazon-linux-2/recommended`) 
+create_instance_profile = Whether to create instance profile
+EOF
   default = []
 }
 
