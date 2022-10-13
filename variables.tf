@@ -9,6 +9,12 @@ variable "ecs_cluster_name" {
   type        = string
 }
 
+variable "use_fargate" {
+  description = "Flag to decide if ECS cluster is based on Fargate or Autoscaling based EC2"
+  type = bool
+  default = true
+}
+
 variable "enable_cloudwatch_container_insights" {
   description = "(Optional, default false) Flag to decide if container insights should be enabled"
   type        = bool
@@ -39,6 +45,44 @@ EOF
   default     = {}
 }
 
+variable "fargate_capacity_providers" {
+  description = <<EOF
+Providers Map where,
+Map Key: Provider Type; Aloowed Values: FARGATE, FARGATE_SPOT
+Map Value: configuration of providers
+EOF
+  default = {}
+}
+
+## Map Key of `autoscaling_capacity_providers` and `auto_scaling_groups` should be the same
+## 
+variable "autoscaling_capacity_providers" {
+  description = <<EOF
+Providers Map where,
+Map Key: Name of the capacity provider.
+Map Value: Configuration map of the provider
+  name: (Required) Name of the capacity provider.
+  instance_type: (Optional, default t3.micro) The Instance type used in Autoscaling configurations
+  managed_termination_protection:  (Optional) - Enables or disables container-aware termination of instances 
+                                  in the auto scaling group when scale-in happens. 
+                                  Valid values are ENABLED and DISABLED
+  ms_instance_warmup_period: (Optional, defaulu 300) Period of time, in seconds, after a newly launched Amazon 
+                            EC2 instance can contribute to CloudWatch metrics for Auto Scaling group.
+  ms_minimum_scaling_step_size: (Optional) Maximum step adjustment size. A number between 1 and 10,000.
+  ms_maximum_scaling_step_size: (Optional) Minimum step adjustment size. A number between 1 and 10,000.
+  ms_target_capacity: (Optional) Target utilization for the capacity provider. A number between 1 and 100.
+  ms_status: (Optional) Whether auto scaling is managed by ECS.
+  default_strategy: Default strategy for provider (Map having value for base and weight )
+  tags: (Optional) A map of tags to assign to Capacity Provider
+EOF
+  default = {}
+}
+
+## Map Key of `autoscaling_capacity_providers` and `auto_scaling_groups` should be the same
+variable "auto_scaling_groups" {
+  description = "Auto Scaling Groups used with Autoscaling Capacity Providers"
+  default = {}
+}
 ## Tags
 variable "default_tags" {
   description = "(Optional) A map of tags to assign to all the resource."

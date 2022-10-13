@@ -1,46 +1,27 @@
-#### Provision ECS Cluster
-resource aws_ecs_cluster "this" {
-  count = var.create_ecs_cluster ? 1 : 0
+module "ecs_cluster" {
+    source = "./cluster"
 
-  name = var.ecs_cluster_name
+    count = var.create_ecs_cluster ? 1 : 0
 
-  # Cluster Setting: Enable CloudWatch Container Insights
-  dynamic "setting" {
-    for_each = var.enable_cloudwatch_container_insights ? [1] : []
+    cluster_name    = var.ecs_cluster_name
+    use_fargate     = var.use_fargate
 
-    content {
-      name  = "containerInsights"
-      value = "enabled"
-    }
-  }
+    enable_cloudwatch_container_insights = var.enable_cloudwatch_container_insights
 
-  # Cluster Configuration: The execute command configuration
-  dynamic "configuration" {
-    for_each = var.enable_execute_command_configuration ? [1] : []
-    content {
-      # Execute Command Configuration
-      execute_command_configuration {
-        kms_key_id = lookup(var.execute_command_configurations, "kms_key_id", null)
-        logging    = lookup(var.execute_command_configurations, "logging", "DEFAULT")
-        
-        # Logging Configuration for redirecting the log for Execute command results
-        dynamic "log_configuration" {
-              for_each = [lookup(var.execute_command_configurations, "log_configuration", {})]
+    enable_execute_command_configuration = var.enable_execute_command_configuration
+    execute_command_configurations = var.execute_command_configurations
 
-              content {
-                cloud_watch_encryption_enabled = lookup(log_configuration.value, "cloud_watch_encryption_enabled", null)
-                cloud_watch_log_group_name     = lookup(log_configuration.value, "cloud_watch_log_group_name", null)
-                s3_bucket_name                 = lookup(log_configuration.value, "s3_bucket_name", null)
-                s3_bucket_encryption_enabled   = lookup(log_configuration.value, "s3_bucket_encryption_enabled", null)
-                s3_key_prefix                  = lookup(log_configuration.value, "s3_key_prefix", null)
-              }
-            }
-      }
-    }
-  }
+    fargate_capacity_providers = var.fargate_capacity_providers
+    autoscaling_capacity_providers = local.autoscaling_capacity_providers
+    
+    default_tags = var.default_tags
+}
 
-  tags = merge(
-    { "Name" = format("%s", var.ecs_cluster_name) },
-    var.default_tags
-  )
+module "asg" {
+    for_each = var.create_ecs ? var.auto_scaling_groups : {}
+
+    source = "git::https://github.com/arjstack/terraform-aws-asg.git"
+
+    # name = format("ecs_%s_cp_%s", var.ecs_cluster_name, lower(each.key))
+    
 }
