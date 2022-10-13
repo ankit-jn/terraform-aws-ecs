@@ -1,10 +1,15 @@
+variable "aws_region" {
+  description = "THe region to use"
+  type = string
+}
+
 variable "create_ecs_cluster" {
   description = "(Optional, default true) Flag to decide if a new ECS cluster should be created"
   type        = bool
   default     = true
 }
 
-variable "ecs_cluster_name" {
+variable "cluster_name" {
   description = "(Required) The name of the ECS Cluster"
   type        = string
 }
@@ -81,15 +86,77 @@ variable "auto_scaling_groups" {
   default = []
 }
 
-## ECS TASK permissions
+## IAM Policies
+variable "ecs_instance_policies" {
+  description = "ECS Container Instance permissions"
+  default = []
+}
+
 variable "ecs_task_policies" {
+  description = "ECS TASK (Container) permissions"
   default = []
 }
 
 variable "ecs_task_execution_policies" {
+  description = "ECS TASK Execution permissions"
   default = []
 }
 
+variable "service_name" {
+  description = "The name of the ECS service being created."
+  type        = string
+}
+
+variable "service_task_network_mode" {
+  description = "The network mode used by the containers in the ECS Service Task."
+  default     = "awsvpc"
+  type        = string
+}
+
+variable "service_task_pid_mode" {
+  description = "Process namespace to use for the containers in the task."
+  default     = null
+  type        = string
+}
+
+variable "service_volumes" {
+  description = "A list of volumes that containers in the service may use."
+  type        = list(map(string))
+  default     = []
+}
+
+variable "container_configurations" {
+    description = <<EOF
+The Configurations used by Container
+
+name: (Required) The name of the container
+image: (Required) Docker Image to be deployed in the container
+container_port: (Required) Container Port
+host_port: (Required) Host Port
+
+cpu: (Optional, default 1024) CPU assigned to contained
+memory: (Optional, default 1024) Memory assigned to container
+
+log_group: (Optional, default null) The CLoudwath log group for the logs to be sent to
+
+command: (Optional, default null) Commands to run in thew container
+mountPoints: (Optional, default null) Mount points to be setup in the container
+environment: (Optional, default null) Array of Environment variables 
+EOF
+
+}
+
+variable "create_service_log_group" {
+  description = "(Optional, default true) Create a cloudwatch log group to send the service logs"
+  type        = bool
+  default     = true
+}
+
+variable "log_group_retention" {
+  description = "(Optional, default 0) The Log Retention period in days"
+  type        = number
+  default     = 0
+}
 ## Tags
 variable "default_tags" {
   description = "(Optional) A map of tags to assign to all the resource."

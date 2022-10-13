@@ -17,3 +17,13 @@ output "ecs_task_execution_role" {
     description = "IAM Role for ECS Task Exeution with trusted Entity - ECS Task Service"
     value = module.iam_ecs_task.service_linked_roles["ecs-task-execution"]
 }
+
+output "ecs_service_log_group_name" {
+    description = "Name of the Cloudwatch log Group for ECS Service"
+    value       = module.ecs_service.service_log_group_name
+}
+
+output "ecs_service_log_group_arn" {
+    description = "ARN of the Cloudwatch log Group for ECS Service"
+    value       = module.ecs_service.service_log_group_arn
+}
