@@ -54,8 +54,6 @@ EOF
   default = {}
 }
 
-## Map Key of `autoscaling_capacity_providers` and `auto_scaling_groups` should be the same
-## 
 variable "autoscaling_capacity_providers" {
   description = <<EOF
 Providers Map where,
@@ -75,14 +73,23 @@ Map Value: Configuration map of the provider
   default_strategy: Default strategy for provider (Map having value for base and weight )
   tags: (Optional) A map of tags to assign to Capacity Provider
 EOF
-  default = {}
+  default = []
 }
 
-## Map Key of `autoscaling_capacity_providers` and `auto_scaling_groups` should be the same
 variable "auto_scaling_groups" {
   description = "Auto Scaling Groups used with Autoscaling Capacity Providers"
-  default = {}
+  default = []
 }
+
+## ECS TASK permissions
+variable "ecs_task_policies" {
+  default = []
+}
+
+variable "ecs_task_execution_policies" {
+  default = []
+}
+
 ## Tags
 variable "default_tags" {
   description = "(Optional) A map of tags to assign to all the resource."

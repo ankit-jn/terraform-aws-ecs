@@ -18,10 +18,18 @@ module "ecs_cluster" {
 }
 
 module "asg" {
-    for_each = var.create_ecs ? var.auto_scaling_groups : {}
+    for_each = var.create_ecs_cluster ? {for asg in var.auto_scaling_groups : asg.name => asg } : {}
 
     source = "git::https://github.com/arjstack/terraform-aws-asg.git"
-
-    # name = format("ecs_%s_cp_%s", var.ecs_cluster_name, lower(each.key))
     
+    name = each.key
+    
+}
+
+# ECS Task Roles
+module "iam_ecs_task" {
+    source = "git::https://github.com/arjstack/terraform-aws-iam.git"
+    
+    policies = concat(var.ecs_task_policies, var.ecs_task_execution_policies)
+    service_linked_roles    = local.ecs_task_roles
 }
