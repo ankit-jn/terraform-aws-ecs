@@ -39,7 +39,6 @@ EOF
   default     = "MULTIVALUE"
 }
 
-
 variable "service_name" {
   description = "The name of the ECS service being created."
   type        = string
@@ -87,6 +86,22 @@ variable "service_desired_capacity" {
 
 variable "container_configurations" {
     description = "The Configurations used by Container"
+}
+
+variable "service_subnets" {
+    description = "List of subnet IDs associated with the task or service."
+    type        = list(string)
+}
+
+variable "security_groups" {
+    description = "(Optional) List of Security Group IDs associated with the task or service."
+    type        = list(string)
+}
+
+variable "assign_public_ip" {
+    description = "(Optional, Required only for FARGATE) Assign a public IP address to the ENI (Fargate launch type only)."
+    type        = bool
+    default     = false
 }
 
 variable "ecs_task_execution_role_arn" {

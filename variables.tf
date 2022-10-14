@@ -191,7 +191,6 @@ variable "service_launch_type" {
   default     = "EC2" # FARGATE will automatically be set if `use_fargate` is set true 
 }
 
-
 variable "service_task_network_mode" {
   description = "The network mode used by the containers in the ECS Service Task."
   default     = "awsvpc"
@@ -229,6 +228,62 @@ mountPoints: (Optional, default null) Mount points to be setup in the container
 environment: (Optional, default null) Array of Environment variables 
 EOF
 
+}
+
+variable "service_subnets" {
+    description = "List of subnet IDs associated with the task or service."
+    type        = list(string)
+}
+
+variable "assign_public_ip" {
+    description = "(Optional, Required only for FARGATE) Assign a public IP address to the ENI (Fargate launch type only)."
+    type        = bool
+    default     = false
+}
+
+variable "create_service_sg" {
+    description = "Decide to create Security Group for ECS service/task"
+}
+
+variable "service_sg_name" {
+    description = "The name of the Security group"
+}
+
+variable "service_sg_rules" {
+    description = <<EOF
+
+(Optional) Configuration List for Security Group Rules of Security Group:
+It is a map of Rule Pairs where,
+Key of the map is Rule Type and Value of the map would be an array of Security Rules Map 
+There could be 2 Rule Types [Keys] : 'ingress', 'egress'
+
+(Optional) Configuration List of Map for Security Group Rules where each entry will have following properties:
+
+rule_name: (Required) The name of the Rule (Used for terraform perspective to maintain unicity)
+description: (Optional) Description of the rule.
+from_port: (Required) Start port (or ICMP type number if protocol is "icmp" or "icmpv6").
+to_port: (Required) End port (or ICMP code if protocol is "icmp").
+protocol: (Required) Protocol. If not icmp, icmpv6, tcp, udp, or all use the protocol number
+
+self: (Optional) Whether the security group itself will be added as a source to this ingress rule. 
+cidr_blocks: (Optional) List of IPv4 CIDR blocks
+ipv6_cidr_blocks: (Optional) List of IPv6 CIDR blocks.
+source_security_group_id: (Optional) Security group id to allow access to/from
+ 
+Note: 
+1. `cidr_blocks` Cannot be specified with `source_security_group_id` or `self`.
+2. `ipv6_cidr_blocks` Cannot be specified with `source_security_group_id` or `self`.
+3. `source_security_group_id` Cannot be specified with `cidr_blocks`, `ipv6_cidr_blocks` or `self`.
+4. `self` Cannot be specified with `cidr_blocks`, `ipv6_cidr_blocks` or `source_security_group_id`.
+
+EOF
+    default = []
+}
+
+variable "service_additional_sg" {
+    description = "(Optional) List of Existing Security Group IDs associated with the task or service."
+    type        = list(string)
+    default = []
 }
 
 variable "create_service_log_group" {

@@ -35,6 +35,11 @@ locals {
                         }
                     ]
 
-    
+    service_sg_ingress_rules = flatten([ for rule_key, rule in var.service_sg_rules :  rule if rule_key == "ingress" ])
+    service_sg_egress_rules = flatten([ for rule_key, rule in var.service_sg_rules :  rule if rule_key == "egress" ])
 
+    service_additional_sg = var.service_additional_sg != null ? var.service_additional_sg : []
+
+    service_security_groups = var.create_service_sg ? concat([module.ecs_security_group[0].security_group_id], 
+                                                                    local.service_additional_sg) : local.service_additional_sg
 }

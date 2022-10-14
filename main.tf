@@ -25,8 +25,8 @@ module "ecs_cluster" {
 module "asg" {
     for_each = var.create_ecs_cluster ? {for asg in var.auto_scaling_groups : asg.name => asg } : {}
 
-    # source = "git::https://github.com/arjstack/terraform-aws-asg.git?ref=development"
-    source = "../terraform-aws-asg"
+    source = "git::https://github.com/arjstack/terraform-aws-asg.git"
+    
     name = each.key
     
     min_size = each.value.min_size
@@ -62,7 +62,17 @@ resource aws_service_discovery_private_dns_namespace "this" {
     vpc         = var.vpc_id
 }
 
+module "ecs_security_group" {
+    source = "git::https://github.com/arjstack/terraform-aws-security-groups.git"
 
+    count = var.create_service_sg ? 1 : 0
+
+    vpc_id = var.vpc_id
+    name = var.service_sg_name
+
+    ingress_rules = local.service_sg_ingress_rules
+    egress_rules  = local.service_sg_egress_rules
+}
 
 ## ECS Service
 module "ecs_service" {
@@ -88,6 +98,10 @@ module "ecs_service" {
     service_volumes = var.service_volumes
     
     container_configurations = var.container_configurations
+
+    service_subnets = var.service_subnets
+    assign_public_ip = var.assign_public_ip
+    security_groups = local.service_security_groups
 
     ecs_task_execution_role_arn = module.iam_ecs_task.service_linked_roles["ecs-task-execution"].arn
     ecs_task_role_arn           = module.iam_ecs_task.service_linked_roles["ecs-task"].arn

@@ -71,6 +71,12 @@ resource aws_ecs_service "this" {
   desired_count   = var.service_desired_capacity
   launch_type     = var.use_fargate ? "FARGATE" : var.launch_type
 
+  network_configuration {
+      security_groups  = var.security_groups
+      subnets          = var.service_subnets
+      assign_public_ip = !var.use_fargate ? false : var.assign_public_ip
+  }
+  
   dynamic "service_registries" {
     for_each = var.enable_service_discovery ? [1] : []
 
