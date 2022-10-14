@@ -57,11 +57,18 @@ module "ecs_service" {
     source = "./service"
     
     aws_region = var.aws_region
-
+    account_id = data.aws_caller_identity.current.account_id
+    
     cluster_name = var.cluster_name
+    cluster_arn  = local.ecs_cluster_arn
+    
     service_name = var.service_name
+    service_min_capacity = var.service_scalability.min_capacity
+    service_max_capacity = var.service_scalability.max_capacity
+    service_desired_capacity = var.service_scalability.desired_capacity
     
     use_fargate  = var.use_fargate
+    launch_type = var.service_launch_type
     
     service_task_network_mode   = var.service_task_network_mode
     service_task_pid_mode       = var.service_task_pid_mode

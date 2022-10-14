@@ -3,8 +3,18 @@ variable "aws_region" {
   type = string
 }
 
+variable "account_id" {
+  description = "AWS Account ID"
+  type = string
+}
+
 variable "cluster_name" {
   description = "The name of the ECS Cluster"
+  type        = string
+}
+
+variable "cluster_arn" {
+  description = "The ARN of the ECS Cluster"
   type        = string
 }
 
@@ -16,6 +26,11 @@ variable "service_name" {
 variable "use_fargate" {
   description = "Flag to decide if ECS cluster is based on Fargate or Autoscaling based EC2"
   type        = bool
+}
+
+variable "launch_type" {
+  description = "(Optional) Launch type on which to run your service."
+  type        = string
 }
 
 variable "service_task_network_mode" {
@@ -31,6 +46,21 @@ variable "service_task_pid_mode" {
 variable "service_volumes" {
   description = "A list of volumes that containers in the service may use."
   type        = list(map(string))
+}
+
+variable "service_min_capacity" {
+  description = "Min capacity of the scalable target."
+  type        = number
+}
+
+variable "service_max_capacity" {
+  description = "Max capacity of the scalable target"
+  type        = number
+}
+
+variable "service_desired_capacity" {
+  description = "Number of instances of the task definition to place and keep running"
+  type        = number
 }
 
 variable "container_configurations" {

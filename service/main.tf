@@ -62,3 +62,12 @@ resource aws_ecs_task_definition "this" {
       create_before_destroy = true
     }
 }
+
+resource aws_ecs_service "this" {
+
+  name            = var.service_name
+  cluster         = var.cluster_arn
+  task_definition = "${aws_ecs_task_definition.this.family}:${max("${aws_ecs_task_definition.this.revision}")}"
+  desired_count   = var.service_desired_capacity
+  launch_type     = var.use_fargate ? "FARGATE" : var.launch_type
+}

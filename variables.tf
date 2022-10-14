@@ -151,6 +151,23 @@ variable "service_name" {
   type        = string
 }
 
+variable "service_scalability" {
+  description = <<EOF
+The scalability matrix map
+min_capacity: (Required) Min capacity of the scalable target.
+max_capacity: (Required) Max capacity of the scalable target.
+desired_capacity: (Optional) Number of instances of the task definition to place and keep running.
+EOF
+  type        = map(number)
+}
+
+variable "service_launch_type" {
+  description = "(Optional) Launch type on which to run your service."
+  type        = string
+  default     = "EC2" # FARGATE will automatically be set if `use_fargate` is set true 
+}
+
+
 variable "service_task_network_mode" {
   description = "The network mode used by the containers in the ECS Service Task."
   default     = "awsvpc"
