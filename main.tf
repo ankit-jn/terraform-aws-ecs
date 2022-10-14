@@ -52,6 +52,18 @@ module "iam_ecs_task" {
     service_linked_roles    = local.ecs_task_roles
 }
 
+## Create Service Discovery Private DNS Namespace.
+resource aws_service_discovery_private_dns_namespace "this" {
+    count = var.create_dns_namespace ? 1 : 0
+    
+    name        = (var.dns_name != "") ? var.dns_name : format("%s.ecs.local", var.cluster_name)
+    description = "Service Discovery Private DNS Namespace for ECS Cluster - ${var.cluster_name}"
+    
+    vpc         = var.vpc_id
+}
+
+
+
 ## ECS Service
 module "ecs_service" {
     source = "./service"
@@ -82,6 +94,9 @@ module "ecs_service" {
     
     create_service_log_group    = var.create_service_log_group
     log_group_retention         = var.log_group_retention
+
+    enable_service_discovery    = var.enable_service_discovery
+    namespace_id                = local.namespace_id
 
     default_tags = var.default_tags
 }

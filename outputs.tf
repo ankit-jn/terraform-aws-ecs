@@ -33,3 +33,23 @@ output "ecs_service_log_group_arn" {
     description = "ARN of the Cloudwatch log Group for ECS Service"
     value       = module.ecs_service.service_log_group_arn
 }
+
+output "servcie_discovery_namespace_id" {
+    description = "ID of Service Discovery Private Namespace"
+    value = local.namespace_id
+}
+
+output "servcie_discovery_namespace_arn" {
+    description = "ARN of Service Discovery Private Namespace"
+    value = local.namespace_arn
+}
+
+output "servcie_discovery_id" {
+    description = "ID of Service Discovery"
+    value = module.ecs_service.servcie_discovery_id
+}
+
+output "servcie_discovery_arn" {
+    description = "ARN of Service Discovery"
+    value = module.ecs_service.servcie_discovery_arn
+}

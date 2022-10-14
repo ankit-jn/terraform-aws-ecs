@@ -18,6 +18,28 @@ variable "cluster_arn" {
   type        = string
 }
 
+variable "enable_service_discovery" {
+  description = "Decide if service should discovery should be enabled"
+  type        = bool
+  default     = false
+}
+
+variable "namespace_id" {
+  description = "The ID of the namespace to use for DNS configuration."
+  type        = string
+  default     = null
+}
+
+variable "service_routing_policy" {
+  description = <<EOF
+(Optional) The routing policy that you want to apply to all records that Route 53 creates 
+when register an instance and specify the service. Valid Values: MULTIVALUE, WEIGHTED
+EOF
+  type        = string
+  default     = "MULTIVALUE"
+}
+
+
 variable "service_name" {
   description = "The name of the ECS service being created."
   type        = string

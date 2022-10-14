@@ -70,4 +70,17 @@ resource aws_ecs_service "this" {
   task_definition = "${aws_ecs_task_definition.this.family}:${max("${aws_ecs_task_definition.this.revision}")}"
   desired_count   = var.service_desired_capacity
   launch_type     = var.use_fargate ? "FARGATE" : var.launch_type
+
+  dynamic "service_registries" {
+    for_each = var.enable_service_discovery ? [1] : []
+
+    content {
+        registry_arn = aws_service_discovery_service.this[0].arn
+    }
+  }
+
+  tags = merge(
+    { "Name" = "svc-${var.service_name}" },
+    var.default_tags
+  )
 }

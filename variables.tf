@@ -3,6 +3,12 @@ variable "aws_region" {
   type = string
 }
 
+variable "vpc_id" {
+  description = "VPC ID"
+  type        = string 
+  default     = ""
+}
+
 variable "create_ecs_cluster" {
   description = "(Optional, default true) Flag to decide if a new ECS cluster should be created"
   type        = bool
@@ -12,6 +18,24 @@ variable "create_ecs_cluster" {
 variable "cluster_name" {
   description = "(Required) The name of the ECS Cluster"
   type        = string
+}
+
+variable "create_dns_namespace" {
+  description = "Decide if private DNS namespace is required for Service Discovery"
+  type = bool
+  default = false
+}
+
+variable "dns_name" {
+  description = "(Optional, default `<cluster-name>.ecs.local`) The name of the namespace."
+  type        = string
+  default     = null
+}
+
+variable "enable_service_discovery" {
+  description = "Decide if service needs to be registered with service discovery namespace"
+  type        = bool
+  default     = false
 }
 
 variable "use_fargate" {
