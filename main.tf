@@ -25,24 +25,31 @@ module "ecs_cluster" {
 module "asg" {
     for_each = var.create_ecs_cluster ? {for asg in var.auto_scaling_groups : asg.name => asg } : {}
 
-    source = "git::https://github.com/arjstack/terraform-aws-asg.git?ref=development"
-    
+    # source = "git::https://github.com/arjstack/terraform-aws-asg.git?ref=development"
+    source = "../terraform-aws-asg"
     name = each.key
-    create_instance_profile = lookup(each.value, "create_instance_profile", false)
+    
     min_size = each.value.min_size
     max_size = each.value.max_size
     vpc_zone_identifier = each.value.vpc_zone_identifier
     instance_type = each.value.instance_type
     image_id = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami[each.key].value)["image_id"]
-}
 
+    create_instance_profile = lookup(each.value, "create_instance_profile", false)
+    instance_profile_name = try(local.ecs_instance_profiles[each.key].profile_name, format("%s-instance-profile", each.key))
+    instance_profile_path = try(local.ecs_instance_profiles[each.key].profile_path, "/")
+    instance_profile_policies = try(local.ecs_instance_profiles[each.key].profile_role_policies, {})
+    instance_profile_tags = try(local.ecs_instance_profiles[each.key].tags, {})
+
+    default_tags = lookup(each.value, "tags", {})
+}
 
 # ECS Task Roles
 module "iam_ecs_task" {
     source = "git::https://github.com/arjstack/terraform-aws-iam.git"
     
-    policies = concat(var.ecs_instance_policies, var.ecs_task_policies, var.ecs_task_execution_policies)
-    service_linked_roles    = concat(local.ecs_instance_roles, local.ecs_task_roles)
+    policies = var.policies
+    service_linked_roles    = local.ecs_task_roles
 }
 
 ## ECS Service

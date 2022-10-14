@@ -59,13 +59,55 @@ EOF
   default = {}
 }
 
+variable "auto_scaling_groups" {
+  description = <<EOF
+Auto Scaling Groups used with Autoscaling Capacity Providers
+List of Auto Scaling Groups where each entry is a map of following properties:
+
+name: The Name of ASG
+instance_type: The type of the instance.
+min_size = Minimum size of the Auto Scaling Group.
+max_size = Maximum size of the Auto Scaling Group.
+vpc_zone_identifier = List of subnet IDs to launch resources in.
+ssm_parameter_image = The name of the SSM parameter for retrieving the image. (default `/aws/service/ecs/optimized-ami/amazon-linux-2/recommended`) 
+create_instance_profile = Whether to create instance profile
+tags = (Optional, default {}) A map of tags to assign to ASG
+EOF
+  default = []
+}
+
+variable "ecs_instance_profiles" {
+  description = <<EOF
+Instance Profiles used with Autoscaling Groups
+List of Instance profiles where each entry is a map of following properties:
+
+asg_name: ASG Name to be used (Refer `name` attribute in property `auto_scaling_groups`) 
+profile_name: (Optional Default `<ASG Name>-instance-profile`) Instance profile Name
+profile_path = (Optional, default \"/\") Path to the instance profile.
+profile_role_policies = (Optional, default []) List of Map of Policies to be attached to Instance profile; 
+                        Refer https://github.com/arjstack/terraform-aws-iam#policy for the structure
+tags = (Optional, default {}) A map of tags to assign to Instance profile
+EOF
+    default = [
+      {
+        asg_name = "ecs-cp-primary"
+        profile_name = ""
+        profile_path = ""
+        profile_role_policies = []
+        profile_tags = {
+
+        }
+      }
+    ]
+}
+
 variable "autoscaling_capacity_providers" {
   description = <<EOF
 Providers Map where,
 Map Key: Name of the capacity provider.
 Map Value: Configuration map of the provider
   name: (Required) Name of the capacity provider.
-  instance_type: (Optional, default t3.micro) The Instance type used in Autoscaling configurations
+  asg_name: ASG Name to be used (Refer `name` attribute in property `auto_scaling_groups`) 
   managed_termination_protection:  (Optional) - Enables or disables container-aware termination of instances 
                                   in the auto scaling group when scale-in happens. 
                                   Valid values are ENABLED and DISABLED
@@ -81,35 +123,26 @@ EOF
   default = []
 }
 
-variable "auto_scaling_groups" {
-  description = <<EOF
-Auto Scaling Groups used with Autoscaling Capacity Providers
-List of Auto Scaling Groups where each entry is a map of following properties:
-
-name: The Name of ASG
-instance_type: The type of the instance.
-min_size = Minimum size of the Auto Scaling Group.
-max_size = Maximum size of the Auto Scaling Group.
-vpc_zone_identifier = List of subnet IDs to launch resources in.
-ssm_parameter_image = The name of the SSM parameter for retrieving the image. (default `/aws/service/ecs/optimized-ami/amazon-linux-2/recommended`) 
-create_instance_profile = Whether to create instance profile
-EOF
-  default = []
-}
-
 ## IAM Policies
 variable "ecs_instance_policies" {
   description = "ECS Container Instance permissions"
   default = []
 }
+variable "policies" {
+  description = <<EOF
+List Policies to be provisioned where each entry will be a map for Policy configuration
+Refer https://github.com/arjstack/terraform-aws-iam#policy for the structure
+EOF
+  default = []
+}
 
 variable "ecs_task_policies" {
-  description = "ECS TASK (Container) permissions"
+  description = "List of ECS TASK (Container) Policy names (as defined in `ecs_policies` property)"
   default = []
 }
 
 variable "ecs_task_execution_policies" {
-  description = "ECS TASK Execution permissions"
+  description = "ECS TASK Execution Policy names (as defined in `ecs_policies` property)"
   default = []
 }
 
