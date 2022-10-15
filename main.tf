@@ -25,7 +25,8 @@ module "ecs_cluster" {
 module "asg" {
     for_each = var.create_ecs_cluster ? {for asg in var.auto_scaling_groups : asg.name => asg } : {}
 
-    source = "git::https://github.com/arjstack/terraform-aws-asg.git"
+    # source = "git::https://github.com/arjstack/terraform-aws-asg.git"
+    source = "../terraform-aws-asg"
     
     name = each.key
     
@@ -38,14 +39,17 @@ module "asg" {
     create_instance_profile = lookup(each.value, "create_instance_profile", false)
     instance_profile_name = try(local.ecs_instance_profiles[each.key].profile_name, format("%s-instance-profile", each.key))
     instance_profile_path = try(local.ecs_instance_profiles[each.key].profile_path, "/")
-    instance_profile_policies = try(local.ecs_instance_profiles[each.key].profile_role_policies, {})
+    
+    //calculate arns
+    instance_profile_policy_arns = local.ecs_instance_profile_policies[each.key]# try(local.ecs_instance_profiles[each.key].profile_role_policies, {})
+    
     instance_profile_tags = try(local.ecs_instance_profiles[each.key].tags, {})
 
     default_tags = lookup(each.value, "tags", {})
 }
 
 # ECS Task Roles
-module "iam_ecs_task" {
+module "iam_ecs" {
     source = "git::https://github.com/arjstack/terraform-aws-iam.git"
     
     policies = var.policies
@@ -103,8 +107,8 @@ module "ecs_service" {
     assign_public_ip = var.assign_public_ip
     security_groups = local.service_security_groups
 
-    ecs_task_execution_role_arn = module.iam_ecs_task.service_linked_roles["ecs-task-execution"].arn
-    ecs_task_role_arn           = module.iam_ecs_task.service_linked_roles["ecs-task"].arn
+    ecs_task_execution_role_arn = module.iam_ecs.service_linked_roles["ecs-task-execution"].arn
+    ecs_task_role_arn           = module.iam_ecs.service_linked_roles["ecs-task"].arn
     
     create_service_log_group    = var.create_service_log_group
     log_group_retention         = var.log_group_retention

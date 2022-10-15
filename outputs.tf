@@ -16,12 +16,12 @@ output "asg" {
 
 output "ecs_task_role" {
     description = "IAM Role for ECS Task with trusted Entity - ECS Task Service"
-    value = module.iam_ecs_task.service_linked_roles["ecs-task"]
+    value = module.iam_ecs.service_linked_roles["ecs-task"]
 }
 
 output "ecs_task_execution_role" {
     description = "IAM Role for ECS Task Exeution with trusted Entity - ECS Task Service"
-    value = module.iam_ecs_task.service_linked_roles["ecs-task-execution"]
+    value = module.iam_ecs.service_linked_roles["ecs-task-execution"]
 }
 
 output "ecs_service_log_group_name" {

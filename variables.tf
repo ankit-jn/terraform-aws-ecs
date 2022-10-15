@@ -108,21 +108,11 @@ List of Instance profiles where each entry is a map of following properties:
 asg_name: ASG Name to be used (Refer `name` attribute in property `auto_scaling_groups`) 
 profile_name: (Optional Default `<ASG Name>-instance-profile`) Instance profile Name
 profile_path = (Optional, default \"/\") Path to the instance profile.
-profile_role_policies = (Optional, default []) List of Map of Policies to be attached to Instance profile; 
+policies = (Optional, default []) List of Map of Policies to be attached to Instance profile; 
                         Refer https://github.com/arjstack/terraform-aws-iam#policy for the structure
 tags = (Optional, default {}) A map of tags to assign to Instance profile
 EOF
-    default = [
-      {
-        asg_name = "ecs-cp-primary"
-        profile_name = ""
-        profile_path = ""
-        profile_role_policies = []
-        profile_tags = {
-
-        }
-      }
-    ]
+    default = []
 }
 
 variable "autoscaling_capacity_providers" {
@@ -132,6 +122,7 @@ Map Key: Name of the capacity provider.
 Map Value: Configuration map of the provider
   name: (Required) Name of the capacity provider.
   asg_name: ASG Name to be used (Refer `name` attribute in property `auto_scaling_groups`) 
+  asg_arn: ASG ARN to be used (Existing ASG)
   managed_termination_protection:  (Optional) - Enables or disables container-aware termination of instances 
                                   in the auto scaling group when scale-in happens. 
                                   Valid values are ENABLED and DISABLED

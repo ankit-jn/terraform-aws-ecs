@@ -65,7 +65,7 @@ resource aws_ecs_cluster_capacity_providers "this" {
 ## Provision ASG Based Capacity Providers
 ## Not required to provision if ECS cluster is based on Fargate
 resource aws_ecs_capacity_provider "this" {
-    for_each = var.use_fargate ? {} : var.autoscaling_capacity_providers
+    for_each = local.autoscaling_capacity_providers
 
     name = each.key
   
