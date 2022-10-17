@@ -1,18 +1,3 @@
-# Create CloudWatch group and log stream
-resource aws_cloudwatch_log_group "this" {
-
-    count = var.create_service_log_group ? 1 : 0
-
-    name  = "/ecs/${var.cluster_name}/svc-${var.service_name}"
-
-    retention_in_days = var.log_group_retention
-
-    tags = merge(
-      { "Name" = "logs-svc-${var.service_name}" },
-      var.default_tags
-    )
-}
-
 data template_file "container_def" {
     template = file("${path.module}/containers/container.json.tpl")
 
@@ -65,28 +50,54 @@ resource aws_ecs_task_definition "this" {
 
 resource aws_ecs_service "this" {
 
-  name            = var.service_name
-  cluster         = var.cluster_arn
-  task_definition = "${aws_ecs_task_definition.this.family}:${max("${aws_ecs_task_definition.this.revision}")}"
-  desired_count   = var.service_desired_capacity
-  launch_type     = var.use_fargate ? "FARGATE" : var.launch_type
+    name            = var.service_name
+    cluster         = var.cluster_arn
+    task_definition = "${aws_ecs_task_definition.this.family}:${max("${aws_ecs_task_definition.this.revision}")}"
+    desired_count   = var.service_desired_capacity
+    launch_type     = var.use_fargate ? "FARGATE" : var.launch_type
 
-  network_configuration {
-      security_groups  = var.security_groups
-      subnets          = var.service_subnets
-      assign_public_ip = !var.use_fargate ? false : var.assign_public_ip
-  }
-  
-  dynamic "service_registries" {
-    for_each = var.enable_service_discovery ? [1] : []
-
-    content {
-        registry_arn = aws_service_discovery_service.this[0].arn
+    network_configuration {
+        security_groups  = var.security_groups
+        subnets          = var.service_subnets
+        assign_public_ip = !var.use_fargate ? false : var.assign_public_ip
     }
-  }
+    
+    dynamic "service_registries" {
+        for_each = var.enable_service_discovery ? [1] : []
 
-  tags = merge(
-    { "Name" = "svc-${var.service_name}" },
-    var.default_tags
-  )
+        content {
+            registry_arn = aws_service_discovery_service.this[0].arn
+        }
+    }
+
+    dynamic "load_balancer" {
+        for_each = var.attach_load_balancer ? [1] : []
+
+        content {
+            target_group_arn = var.load_balancer_arn
+            container_name   = var.container_configurations.name
+            container_port   = var.container_configurations.container_port
+        }
+    }
+
+    tags = merge(
+      { "Name" = "svc-${var.service_name}" },
+      var.default_tags
+    )
 }
+
+# Create CloudWatch group and log stream
+resource aws_cloudwatch_log_group "this" {
+
+    count = var.create_service_log_group ? 1 : 0
+
+    name  = "/ecs/${var.cluster_name}/svc-${var.service_name}"
+
+    retention_in_days = var.log_group_retention
+
+    tags = merge(
+      { "Name" = "logs-svc-${var.service_name}" },
+      var.default_tags
+    )
+}
+

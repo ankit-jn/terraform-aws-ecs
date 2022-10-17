@@ -21,6 +21,8 @@ module "ecs_cluster" {
 module "iam_ecs" {
     source = "git::https://github.com/arjstack/terraform-aws-iam.git"
     
+    count = var.create_service ? 1 : 0
+    
     policies = var.policies
     service_linked_roles = local.ecs_task_roles
 }
@@ -35,10 +37,11 @@ resource aws_service_discovery_private_dns_namespace "this" {
     vpc         = var.vpc_id
 }
 
+## Security Group for ECS Service/Task
 module "ecs_security_group" {
     source = "git::https://github.com/arjstack/terraform-aws-security-groups.git"
 
-    count = var.create_service_sg ? 1 : 0
+    count = (var.create_service && var.create_service_sg) ? 1 : 0
 
     vpc_id = var.vpc_id
     name = var.service_sg_name
@@ -50,40 +53,47 @@ module "ecs_security_group" {
 ## ECS Service
 module "ecs_service" {
     source = "./service"
-    
-    aws_region = var.aws_region
-    account_id = data.aws_caller_identity.current.account_id
+
+    count = var.create_service ? 1 : 0
     
     cluster_name = var.cluster_name
     cluster_arn  = local.ecs_cluster_arn
-    
+    use_fargate  = var.use_fargate    
+    aws_region = var.aws_region
+    account_id = data.aws_caller_identity.current.account_id
+
     service_name = var.service_name
-    service_min_capacity = var.service_scalability.min_capacity
-    service_max_capacity = var.service_scalability.max_capacity
-    service_desired_capacity = var.service_scalability.desired_capacity
-    
-    use_fargate  = var.use_fargate
+    service_min_capacity = lookup(var.service_scalability, "min_capacity", 1)
+    service_max_capacity = lookup(var.service_scalability, "max_capacity", lookup(var.service_scalability, "min_capacity", 1))
+    service_desired_capacity = lookup(var.service_scalability, "desired_capacity", lookup(var.service_scalability, "min_capacity", 1))
     launch_type = var.service_launch_type
     
     service_task_network_mode   = var.service_task_network_mode
     service_task_pid_mode       = var.service_task_pid_mode
-    
+    ecs_task_execution_role_arn = module.iam_ecs[0].service_linked_roles["ecs-task-execution"].arn
+    ecs_task_role_arn           = module.iam_ecs[0].service_linked_roles["ecs-task"].arn
+
     service_volumes = var.service_volumes
     
     container_configurations = var.container_configurations
 
+    ## Network Configurations
     service_subnets = var.service_subnets
     assign_public_ip = var.assign_public_ip
     security_groups = local.service_security_groups
-
-    ecs_task_execution_role_arn = module.iam_ecs.service_linked_roles["ecs-task-execution"].arn
-    ecs_task_role_arn           = module.iam_ecs.service_linked_roles["ecs-task"].arn
     
+    ## Load Balancer Configurations
+    attach_load_balancer = var.attach_load_balancer
+    load_balancer_arn    = var.load_balancer_arn
+    
+    ## Log Management
     create_service_log_group    = var.create_service_log_group
     log_group_retention         = var.log_group_retention
 
+    ## Service Discovery
     enable_service_discovery    = var.enable_service_discovery
     namespace_id                = local.namespace_id
 
+    ## Tags
     default_tags = var.default_tags
 }

@@ -1,3 +1,13 @@
+output "service_arn" {
+    description = "ARN of ECS Service"
+    value       = aws_ecs_service.this.id
+}
+
+output "task_definition_arn" {
+    description = "Full ARN of the Task Definition"
+    value       = aws_ecs_task_definition.this.arn
+}
+
 output "service_log_group_name" {
     description = "Name of the Cloudwatch log Group for ECS Service"
     value       = var.create_service_log_group ? aws_cloudwatch_log_group.this[0].name : ""

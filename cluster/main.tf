@@ -27,8 +27,8 @@ resource aws_ecs_cluster "this" {
               for_each = [lookup(var.execute_command_configurations, "log_configuration", {})]
 
               content {
-                cloud_watch_encryption_enabled = lookup(log_configuration.value, "cloud_watch_encryption_enabled", null)
-                cloud_watch_log_group_name     = lookup(log_configuration.value, "cloud_watch_log_group_name", null)
+                cloud_watch_encryption_enabled = lookup(log_configuration.value, "cloudwatch_encryption_enabled", null)
+                cloud_watch_log_group_name     = lookup(log_configuration.value, "cloudwatch_log_group_name", null)
                 s3_bucket_name                 = lookup(log_configuration.value, "s3_bucket_name", null)
                 s3_bucket_encryption_enabled   = lookup(log_configuration.value, "s3_bucket_encryption_enabled", null)
                 s3_key_prefix                  = lookup(log_configuration.value, "s3_key_prefix", null)

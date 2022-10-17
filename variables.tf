@@ -1,16 +1,5 @@
-variable "aws_region" {
-  description = "THe region to use"
-  type = string
-}
-
-variable "vpc_id" {
-  description = "VPC ID"
-  type        = string 
-  default     = ""
-}
-
 variable "create_ecs_cluster" {
-  description = "(Optional, default true) Flag to decide if a new ECS cluster should be created"
+  description = "(Optional) Flag to decide if a new ECS cluster should be created"
   type        = bool
   default     = true
 }
@@ -20,38 +9,20 @@ variable "cluster_name" {
   type        = string
 }
 
-variable "create_dns_namespace" {
-  description = "Decide if private DNS namespace is required for Service Discovery"
-  type = bool
-  default = false
-}
-
-variable "dns_name" {
-  description = "(Optional, default `<cluster-name>.ecs.local`) The name of the namespace."
-  type        = string
-  default     = null
-}
-
-variable "enable_service_discovery" {
-  description = "Decide if service needs to be registered with service discovery namespace"
-  type        = bool
-  default     = false
-}
-
 variable "use_fargate" {
-  description = "Flag to decide if ECS cluster is based on Fargate or Autoscaling based EC2"
+  description = "(Optional) Flag to decide if ECS cluster is based on Fargate or Autoscaling based EC2"
   type = bool
   default = true
 }
 
 variable "enable_cloudwatch_container_insights" {
-  description = "(Optional, default false) Flag to decide if container insights should be enabled"
+  description = "(Optional) Flag to decide if container insights should be enabled"
   type        = bool
   default     = true
 }
 
 variable "enable_execute_command_configuration" {
-  description = "(Optional, default false) Flag to decide if Execute Command Configuration should be set for cluster"
+  description = "(Optional) Flag to decide if Execute Command Configuration should be set for cluster"
   type        = bool
   default     = false
 }
@@ -65,8 +36,8 @@ The details of the execute command configuration with the following Key-value pa
                      Valid values are NONE, DEFAULT and OVERRIDE
 3. log_configuration - (Optional) The log configuration (5 points below) for the results of the execute command actions Required when logging is OVERRIDE
 
-3.1. cloud_watch_encryption_enabled - (Optional) Whether or not to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled.
-3.2. cloud_watch_log_group_name - (Optional) The name of the CloudWatch log group to send logs to.
+3.1. cloudwatch_encryption_enabled - (Optional) Whether or not to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled.
+3.2. cloudwatch_log_group_name - (Optional) The name of the CloudWatch log group to send logs to.
 3.3. s3_bucket_name - (Optional) The name of the S3 bucket to send logs to.
 3.4. s3_bucket_encryption_enabled - (Optional) Whether or not to enable encryption on the logs sent to S3. If not specified, encryption will be disabled.
 3.5. s3_key_prefix - (Optional) An optional folder in the S3 bucket to place logs in.
@@ -95,8 +66,8 @@ Map Value: Configuration map of the provider
                                   Valid values are ENABLED and DISABLED
   ms_instance_warmup_period: (Optional, defaulu 300) Period of time, in seconds, after a newly launched Amazon 
                             EC2 instance can contribute to CloudWatch metrics for Auto Scaling group.
-  ms_minimum_scaling_step_size: (Optional) Maximum step adjustment size. A number between 1 and 10,000.
-  ms_maximum_scaling_step_size: (Optional) Minimum step adjustment size. A number between 1 and 10,000.
+  ms_minimum_scaling_step_size: (Optional) Minimum step adjustment size. A number between 1 and 10,000.
+  ms_maximum_scaling_step_size: (Optional) Maximum step adjustment size. A number between 1 and 10,000.
   ms_target_capacity: (Optional) Target utilization for the capacity provider. A number between 1 and 100.
   ms_status: (Optional) Whether auto scaling is managed by ECS.
   default_strategy: Default strategy for provider (Map having value for base and weight )
@@ -105,45 +76,67 @@ EOF
   default = []
 }
 
-variable "policies" {
-  description = <<EOF
-List Policies to be provisioned where each entry will be a map for Policy configuration
-Refer https://github.com/arjstack/terraform-aws-iam#policy for the structure
-EOF
-  default = []
+##################################################
+## Service Discovery Configurations
+##################################################
+variable "create_dns_namespace" {
+  description = "(Optional) Flag to decide if private DNS namespace is required for Service Discovery"
+  type = bool
+  default = false
 }
 
-variable "ecs_task_policies" {
-  description = <<EOF
-policy_list - List of Policies to be attached with ECS Task container where each entry will be map with following entries
-    name - Policy Name
-    arn - Policy ARN (if existing policy)
-EOF
-  default = []
+variable "dns_name" {
+  description = "(Optional, default `<cluster-name>.ecs.local`) The name of the namespace."
+  type        = string
+  default     = null
 }
 
-variable "ecs_task_execution_policies" {
-  description = <<EOF
-policy_list - List of Policies to be attached with ECS Task Execution where each entry will be map with following entries
-    name - Policy Name
-    arn - Policy ARN (if existing policy)
-EOF
-  default = []
+variable "vpc_id" {
+  description = "The ID of VPC that is used to associate the namespace with"
+  type        = string 
+  default     = ""
+}
+
+variable "enable_service_discovery" {
+  description = "Flag to decide if service needs to be registered with service discovery namespace"
+  type        = bool
+  default     = false
+}
+
+##################################################
+## ECS Service, Task, Permissions Management
+##################################################
+variable "create_service" {
+  description = "Decide if ECS service should be deployed"
+  type        = bool
+  default     = false
+}
+
+variable "aws_region" {
+  description = "The region to use"
+  type = string
+  default = ""
 }
 
 variable "service_name" {
   description = "The name of the ECS service being created."
   type        = string
+  default     = ""
 }
 
 variable "service_scalability" {
   description = <<EOF
 The scalability matrix map
-min_capacity: (Required) Min capacity of the scalable target.
-max_capacity: (Required) Max capacity of the scalable target.
-desired_capacity: (Optional) Number of instances of the task definition to place and keep running.
+min_capacity: Min capacity of the scalable target.
+max_capacity: Max capacity of the scalable target.
+desired_capacity: Number of instances of the task definition to place and keep running.
 EOF
   type        = map(number)
+  default     = {
+      min_capacity      = 1
+      max_capacity      = 1
+      desired_capacity  = 1
+  }
 }
 
 variable "service_launch_type" {
@@ -154,8 +147,8 @@ variable "service_launch_type" {
 
 variable "service_task_network_mode" {
   description = "The network mode used by the containers in the ECS Service Task."
-  default     = "awsvpc"
   type        = string
+  default     = "awsvpc"
 }
 
 variable "service_task_pid_mode" {
@@ -179,21 +172,47 @@ image: (Required) Docker Image to be deployed in the container
 container_port: (Required) Container Port
 host_port: (Required) Host Port
 
-cpu: (Optional, default 1024) CPU assigned to contained
+cpu: (Optional, default 1024) CPU assigned to container
 memory: (Optional, default 1024) Memory assigned to container
 
-log_group: (Optional, default null) The CLoudwath log group for the logs to be sent to
-
-command: (Optional, default null) Commands to run in thew container
-mountPoints: (Optional, default null) Mount points to be setup in the container
-environment: (Optional, default null) Array of Environment variables 
+log_group: (Optional, default null) The Cloudwatch log group for the logs to be sent to
 EOF
-
+    default = {}
 }
 
+variable "policies" {
+  description = <<EOF
+List of Policies to be provisioned where each entry will be a map for Policy configuration
+Refer https://github.com/arjstack/terraform-aws-iam#policy for the structure
+EOF
+  default = []
+}
+
+variable "ecs_task_policies" {
+  description = <<EOF
+List of Policies to be attached with ECS Task container where each entry will be map with following entries
+    name - Policy Name
+    arn - Policy ARN (if existing policy)
+EOF
+  default = []
+}
+
+variable "ecs_task_execution_policies" {
+  description = <<EOF
+List of Policies to be attached with ECS Task Execution where each entry will be map with following entries
+    name - Policy Name
+    arn - Policy ARN (if existing policy)
+EOF
+  default = []
+}
+
+##################################################
+## Network configurations for ECS Service/Task
+##################################################
 variable "service_subnets" {
     description = "List of subnet IDs associated with the task or service."
     type        = list(string)
+    default     = []
 }
 
 variable "assign_public_ip" {
@@ -203,11 +222,15 @@ variable "assign_public_ip" {
 }
 
 variable "create_service_sg" {
-    description = "Decide to create Security Group for ECS service/task"
+    description = "Flag to decide to create Security Group for ECS service/task"
+    type        = bool
+    default     = "false"
 }
 
 variable "service_sg_name" {
     description = "The name of the Security group"
+    type        = string
+    default     = ""
 }
 
 variable "service_sg_rules" {
@@ -238,7 +261,7 @@ Note:
 4. `self` Cannot be specified with `cidr_blocks`, `ipv6_cidr_blocks` or `source_security_group_id`.
 
 EOF
-    default = []
+    default = {}
 }
 
 variable "service_additional_sg" {
@@ -247,18 +270,39 @@ variable "service_additional_sg" {
     default = []
 }
 
+##################################################
+## Load Balancer Configurations
+##################################################
+variable "attach_load_balancer" {
+    description = "(Optional) Flat to decide if ECS service should be attached to load balancer"
+    type        = bool
+    default     = true
+}
+
+variable "load_balancer_arn" {
+    description = "(Optional) ARN of the load balancer"
+    type        = string
+    default     = ""
+}
+
+##################################################
+## Log management for ECS Service
+##################################################
 variable "create_service_log_group" {
-  description = "(Optional, default true) Create a cloudwatch log group to send the service logs"
-  type        = bool
-  default     = true
+    description = "(Optional) Flag to decide if Cloudwatch log group should be ctreated for sending the service logs to"
+    type        = bool
+    default     = true
 }
 
 variable "log_group_retention" {
-  description = "(Optional, default 0) The Log Retention period in days"
-  type        = number
-  default     = 0
+    description = "(Optional) The Log Retention period in days"
+    type        = number
+    default     = 0
 }
+
+##################################################
 ## Tags
+##################################################
 variable "default_tags" {
   description = "(Optional) A map of tags to assign to all the resource."
   type        = map(any)

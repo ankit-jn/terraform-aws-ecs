@@ -28,6 +28,6 @@ locals {
 
     service_additional_sg = var.service_additional_sg != null ? var.service_additional_sg : []
 
-    service_security_groups = var.create_service_sg ? concat([module.ecs_security_group[0].security_group_id], 
+    service_security_groups = (var.create_service && var.create_service_sg) ? concat([module.ecs_security_group[0].security_group_id], 
                                                                     local.service_additional_sg) : local.service_additional_sg
 }
