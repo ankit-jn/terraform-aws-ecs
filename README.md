@@ -4,6 +4,7 @@ A Terraform module for configuring ECS Cluster and ECS Services
 
 ## Resources
 This module features the following components to be provisioned with different combinations:
+
 - ECS Cluster [[aws_ecs_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster)]
 - ECS Cluster Capacity Providers [[aws_ecs_cluster_capacity_providers](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster_capacity_providers)]
 - ECS Capacity Provider [[aws_ecs_capacity_provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_capacity_provider)]
@@ -84,8 +85,8 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 | <a name="service_volumes"></a> [service_volumes](#service\_volumes) | A list of volumes that containers in the service may use | `list(map(string))` | `[]` | no |  |
 | <a name="container_configurations"></a> [container_configurations](#container\_configurations) | The Configurations used by Container | `map` |  | yes |  |
 | <a name="policies"></a> [policies](#policy) | List of Policies to be provisioned | `[]` |  | no |  |
-| <a name="ecs_task_policies"></a> [ecs_task_policies](#ecs\_policy) | List of Policies to be attached with ECS Task container  | `string` |  | no |  |
-| <a name="ecs_task_execution_policies"></a> [ecs_task_execution_policies](#ecs\_policy) | List of Policies to be attached with ECS Task Execution | `string` |  | no |  |
+| <a name="ecs_task_policies"></a> [ecs_task_policies](#ecs\_policy) | List of Policies to be attached with ECS Task container  | `string` |  | no | <pre>[<br>   {<br>     "name" = "arjstack-custom-policy"<br>   },<br>   {<br>     "name"  = "AWSCloudTrail_ReadOnlyAccess"<br>     "arn"   = "arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess"<br>   }<br>]<br> |
+| <a name="ecs_task_execution_policies"></a> [ecs_task_execution_policies](#ecs\_policy) | List of Policies to be attached with ECS Task Execution | `string` |  | no | Same as `ecs_task_policies` |
 | <a name="enable_service_discovery"></a> [enable_service_discovery](#input\_enable\_service\_discovery) | Flag to decide if service needs to be registered with service discovery namespace | `bool` | `false` | no |  |
 
 #### ECS Service - Network Configuration
@@ -192,7 +193,7 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 
 #### policy
 
-Policy content to be add to the new policy will be read from the JSON document.<br>
+Policy content to be add to the new policy (i.e. the policy for which arn is not defined) will be read from the JSON document.<br>
 &nbsp;&nbsp;&nbsp;- JSON document must be placed in the directory `policies` under root directory.<br>
 &nbsp;&nbsp;&nbsp;- The naming format of the file: <Value set in `name` property>.json
 
@@ -204,6 +205,7 @@ Policy content to be add to the new policy will be read from the JSON document.<
 | <a name="tags"></a> [tags](#input\_tags) | A map of tags to assign to the policy. | `map` | `{}` | no |  |
 
 #### ecs_policy
+
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
 | <a name="name"></a> [name](#input\_name) | Policy Name | `string` |  | yes |  |
