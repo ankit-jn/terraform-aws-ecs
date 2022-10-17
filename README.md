@@ -234,7 +234,7 @@ Policy content to be add to the new policy (i.e. the policy for which arn is not
 
 | Name | Type | Description |
 |:------|:------|:------|
-| <a name="cluster_arn"></a> [cluster_arn](#output\_cluster\_arn) | The ID/ARN of the ECS cluster | `string` | 
+| <a name="cluster_arn"></a> [cluster_arn](#output\_cluster\_arn) | `string` | The ID/ARN of the ECS cluster |
 | <a name="service_discovery_namespace_id"></a> [service_discovery_namespace_id](#output\_service\_discovery\_namespace\_id) | `string` | ID of Service Discovery Private Namespace |
 | <a name="service_discovery_namespace_arn"></a> [service_discovery_namespace_arn](#output\_service\_discovery\_namespace\_arn) | `string` | ARN of Service Discovery Private Namespace |
 | <a name="service_arn"></a> [service_arn](#output\_service\_arn) | `string` | ARN of ECS Service |
