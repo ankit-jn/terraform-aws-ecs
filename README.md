@@ -232,15 +232,15 @@ Policy content to be add to the new policy will be read from the JSON document.<
 
 | Name | Type | Description |
 |:------|:------|:------|
-| <a name="ecs_cluster_arn"></a> [ecs_cluster_arn](#output\_ecs\_cluster\_arn) | The ID/ARN of the ECS cluster | `string` | 
-| <a name="servcie_discovery_namespace_id"></a> [servcie_discovery_namespace_id](#output\_servcie\_discovery\_namespace\_id) | ID of Service Discovery Private Namespace | `string` | 
-| <a name="servcie_discovery_namespace_arn"></a> [servcie_discovery_namespace_arn](#output\_servcie\_discovery\_namespace\_arn) | ARN of Service Discovery Private Namespace | `string` | 
+| <a name="cluster_arn"></a> [cluster_arn](#output\_cluster\_arn) | The ID/ARN of the ECS cluster | `string` | 
+| <a name="service_discovery_namespace_id"></a> [service_discovery_namespace_id](#output\_service\_discovery\_namespace\_id) | ID of Service Discovery Private Namespace | `string` | 
+| <a name="service_discovery_namespace_arn"></a> [service_discovery_namespace_arn](#output\_service\_discovery\_namespace\_arn) | ARN of Service Discovery Private Namespace | `string` | 
 | <a name="service_arn"></a> [service_arn](#output\_service\_arn) | ARN of ECS Service | `string` | 
 | <a name="task_definition_arn"></a> [task_definition_arn](#output\_task\_definition\_arn) | Full ARN of the Task Definition | `string` | 
 | <a name="ecs_task_role"></a> [ecs_task_role](#output\_ecs\_task\_role) | IAM Role for ECS Task with trusted Entity - ECS Task Service | `string` | 
 | <a name="ecs_task_execution_role"></a> [ecs_task_execution_role](#output\_ecs\_task\_execution\_role) | IAM Role for ECS Task Exeution with trusted Entity - ECS Task Service | `string` | 
-| <a name="ecs_service_log_group_name"></a> [ecs_service_log_group_name](#output\_ecs\_service\_log\_group\_name) | Name of the Cloudwatch log Group for ECS Service | `string` | 
-| <a name="ecs_service_log_group_arn"></a> [ecs_service_log_group_arn](#output\_ecs\_service\_log\_group\_arn) | ARN of the Cloudwatch log Group for ECS Service | `string` | 
+| <a name="service_log_group_name"></a> [service_log_group_name](#output\_service\_log\_group\_name) | Name of the Cloudwatch log Group for ECS Service | `string` | 
+| <a name="service_log_group_arn"></a> [service_log_group_arn](#output\_service\_log\_group\_arn) | ARN of the Cloudwatch log Group for ECS Service | `string` | 
 | <a name="service_discovery_id"></a> [service_discovery_id](#output\_service\_discovery\_id) | ID of Service Discovery | `string` | 
 | <a name="service_discovery_arn"></a> [service_discovery_arn](#output\_service\_discovery\_arn) | ARN of Service Discovery | `string` | 
 
