@@ -23,7 +23,7 @@ This module features the following components to be provisioned with different c
 - Security Group [[ecs_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)]
     - Security Group to be attached with ECS Service/Task
 - Security Group Rules [[aws_security_group_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule)]
-- IAM Policy [[aws_iam_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/organizations_organizationiam_policy)]
+- IAM Policy [[aws_iam_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy)]
     - Policies to define permissions used by ECS Container Agent and ECS Container Tasks
 - IAM Roles [[aws_iam_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)]
     - IAM Role that the Amazon ECS container agent and the Docker daemon can assume
