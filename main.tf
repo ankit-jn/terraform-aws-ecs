@@ -12,40 +12,9 @@ module "ecs_cluster" {
     execute_command_configurations = var.execute_command_configurations
 
     fargate_capacity_providers = var.fargate_capacity_providers
-    autoscaling_capacity_providers = local.autoscaling_capacity_providers
+    autoscaling_capacity_providers = var.autoscaling_capacity_providers
 
     default_tags = var.default_tags
-
-    depends_on = [
-        module.asg
-    ]
-}
-
-## Auto Scaling Groups for Capacity Providers
-module "asg" {
-    for_each = var.create_ecs_cluster ? {for asg in var.auto_scaling_groups : asg.name => asg } : {}
-
-    # source = "git::https://github.com/arjstack/terraform-aws-asg.git"
-    source = "../terraform-aws-asg"
-    
-    name = each.key
-    
-    min_size = each.value.min_size
-    max_size = each.value.max_size
-    vpc_zone_identifier = each.value.vpc_zone_identifier
-    instance_type = each.value.instance_type
-    image_id = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami[each.key].value)["image_id"]
-
-    create_instance_profile = lookup(each.value, "create_instance_profile", false)
-    instance_profile_name = try(local.ecs_instance_profiles[each.key].profile_name, format("%s-instance-profile", each.key))
-    instance_profile_path = try(local.ecs_instance_profiles[each.key].profile_path, "/")
-    
-    //calculate arns
-    instance_profile_policy_arns = local.ecs_instance_profile_policies[each.key]# try(local.ecs_instance_profiles[each.key].profile_role_policies, {})
-    
-    instance_profile_tags = try(local.ecs_instance_profiles[each.key].tags, {})
-
-    default_tags = lookup(each.value, "tags", {})
 }
 
 # ECS Task Roles
@@ -53,7 +22,7 @@ module "iam_ecs" {
     source = "git::https://github.com/arjstack/terraform-aws-iam.git"
     
     policies = var.policies
-    service_linked_roles    = local.ecs_task_roles
+    service_linked_roles = local.ecs_task_roles
 }
 
 ## Create Service Discovery Private DNS Namespace.
