@@ -19,7 +19,7 @@ module "ecs_cluster" {
 
 # ECS Task Roles
 module "iam_ecs" {
-    source = "git::https://github.com/arjstack/terraform-aws-iam.git"
+    source = "git::https://github.com/arjstack/terraform-aws-iam.git?ref=v1.0.0"
     
     count = var.create_service ? 1 : 0
     
@@ -39,7 +39,7 @@ resource aws_service_discovery_private_dns_namespace "this" {
 
 ## Security Group for ECS Service/Task
 module "ecs_security_group" {
-    source = "git::https://github.com/arjstack/terraform-aws-security-groups.git"
+    source = "git::https://github.com/arjstack/terraform-aws-security-groups.git?ref=v1.0.0"
 
     count = (var.create_service && var.create_service_sg) ? 1 : 0
 
