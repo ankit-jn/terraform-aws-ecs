@@ -248,5 +248,5 @@ Policy content to be add to the new policy (i.e. the policy for which arn is not
 
 ## Authors
 
-Module is maintained by [Ankit Jain](https://github.com/ankit-jn) with help from [these professional](https://github.com/arjstack/terraform-aws-iam/graphs/contributors).
+Module is maintained by [Ankit Jain](https://github.com/ankit-jn) with help from [these professional](https://github.com/arjstack/terraform-aws-ecs/graphs/contributors).
 
