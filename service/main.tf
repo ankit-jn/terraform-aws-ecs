@@ -11,7 +11,7 @@ data template_file "container_def" {
       memory          = lookup(var.container_configurations, "memory", 1024)
       
       region          = var.aws_region
-      log_group       = var.create_service_log_group ? aws_cloudwatch_log_group.this[0].name : ""   
+      log_group       = var.create_log_group ? aws_cloudwatch_log_group.this[0].name : ""   
     }
 }
 
@@ -53,12 +53,12 @@ resource aws_ecs_service "this" {
     name            = var.service_name
     cluster         = var.cluster_arn
     task_definition = "${aws_ecs_task_definition.this.family}:${max("${aws_ecs_task_definition.this.revision}")}"
-    desired_count   = var.service_desired_capacity
+    desired_count   = var.desired_capacity
     launch_type     = var.use_fargate ? "FARGATE" : var.launch_type
 
     network_configuration {
         security_groups  = var.security_groups
-        subnets          = var.service_subnets
+        subnets          = var.subnets
         assign_public_ip = !var.use_fargate ? false : var.assign_public_ip
     }
     
@@ -89,7 +89,7 @@ resource aws_ecs_service "this" {
 # Create CloudWatch group and log stream
 resource aws_cloudwatch_log_group "this" {
 
-    count = var.create_service_log_group ? 1 : 0
+    count = var.create_log_group ? 1 : 0
 
     name  = "/ecs/${var.cluster_name}/svc-${var.service_name}"
 

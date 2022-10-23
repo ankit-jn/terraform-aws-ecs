@@ -56,7 +56,7 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
-| <a name="create_ecs_cluster"></a> [create_ecs_cluster](#input\_create\_ecs\_cluster) | Flag to decide if a new ECS cluster should be created | `bool` | `true` | no |  |
+| <a name="create_cluster"></a> [create_cluster](#input\_create\_cluster) | Flag to decide if a new ECS cluster should be created | `bool` | `true` | no |  |
 | <a name="cluster_name"></a> [cluster_name](#input\_cluster\_name) | The name of the ECS Cluster | `string` |  | yes |  |
 | <a name="use_fargate"></a> [use_fargate](#input\_use\_fargate) | Flag to decide if ECS cluster is based on Fargate or Autoscaling based EC2 | `bool` | `true` | no |  |
 | <a name="enable_cloudwatch_container_insights"></a> [enable_cloudwatch_container_insights](#input\_enable\_cloudwatch\_container\_insights) | Flag to decide if container insights should be enabled | `bool` | `true` | no |  |
@@ -88,6 +88,8 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 | <a name="ecs_task_policies"></a> [ecs_task_policies](#ecs\_policy) | List of Policies to be attached with ECS Task container  | `string` |  | no | <pre>[<br>   {<br>     "name" = "arjstack-custom-policy"<br>   },<br>   {<br>     "name"  = "AWSCloudTrail_ReadOnlyAccess"<br>     "arn"   = "arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess"<br>   }<br>]<br> |
 | <a name="ecs_task_execution_policies"></a> [ecs_task_execution_policies](#ecs\_policy) | List of Policies to be attached with ECS Task Execution | `string` |  | no | Same as `ecs_task_policies` |
 | <a name="enable_service_discovery"></a> [enable_service_discovery](#input\_enable\_service\_discovery) | Flag to decide if service needs to be registered with service discovery namespace | `bool` | `false` | no |  |
+| <a name="routing_policy"></a> [routing_policy](#input\_routing\_policy) | The routing policy that you want to apply to all records that Route 53 creates 
+when register an instance and specify the service | `string` | `MULTIVALUE` | no |  |
 
 #### ECS Service - Network Configuration
 ---
@@ -96,22 +98,24 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
-| <a name="service_subnets"></a> [service_subnets](#input\_service\_subnets) | List of subnet IDs associated with the task or service. | `list(string)` |  | yes | <pre>[ "subnet-xxxxx......", "subnet-xxxx4747cv..." ] |
+| <a name="subnets"></a> [subnets](#input\_subnets) | List of subnet IDs associated with the task or service. | `list(string)` |  | yes | <pre>[ "subnet-xxxxx......", "subnet-xxxx4747cv..." ] |
 | <a name="assign_public_ip"></a> [assign_public_ip](#input\_assign\_public\_ip) | Assign a public IP address to the ENI (Fargate launch type only) | `bool` | `false` | no |  |
-| <a name="create_service_sg"></a> [create_service_sg](#input\_create\_service\_sg) | Flag to decide to create Security Group for ECS service/task | `bool` | `false` | no |  |
-| <a name="service_sg_name"></a> [service_sg_name](#input\_service\_sg\_name) | The name of the Security group | `string` |  | no | Required when `create_service_sg` is set true |
-| <a name="service_sg_rules"></a> [service_sg_rules](#input\_sg\_rules) | Map of Security Group Rules mapped with 2 Keys `ingress` and `egress`. <br>The value for each key will be a list of Security group rules where each entry of the list will again be a map of Rule configuration | `map` | `{}` | no | <pre>{<br>   ingress = [<br>      {<br>        rule_name = "Self Ingress Rule"<br>        description = "Self Ingress Rule"<br>        from_port =0<br>        to_port = 0<br>        protocol = "-1"<br>        self = true<br>      },<br>      {<br>        rule_name = "Ingress from IPv4 CIDR"<br>        description = "IPv4 Rule"<br>        from_port = 443<br>        to_port = 443<br>        protocol = "tcp"<br>        cidr_blocks = ["xx.xx.xx.xx/xx", "yy.yy.yy.yy/yy"]<br>      }<br>   ]<br>   egress =[<br>      {<br>        rule_name = "Self Egress Rule"<br>        description = "Self Egress Rule"<br>        from_port =0<br>        to_port = 0<br>        protocol = "-1"<br>        self = true<br>      }<br>   ]<br>} |
-| <a name="service_additional_sg"></a> [service_additional_sg](#input\_service\_additional\_sg) | List of Existing Security Group IDs associated with the task or service | `list(string)` | `[]` | no | <pre>[ "sg-xxxxx......", "sg-xxxx4747cv..." ] |
+| <a name="create_sg"></a> [create_sg](#input\_create\_sg) | Flag to decide to create Security Group for ECS service/task | `bool` | `false` | no |  |
+| <a name="sg_name"></a> [sg_name](#input\_sg\_name) | The name of the Security group | `string` |  | no | Required when `create_service_sg` is set true |
+| <a name="sg_rules"></a> [sg_rules](#input\_sg\_rules) | Map of Security Group Rules mapped with 2 Keys `ingress` and `egress`. <br>The value for each key will be a list of Security group rules where each entry of the list will again be a map of Rule configuration | `map` | `{}` | no | <pre>{<br>   ingress = [<br>      {<br>        rule_name = "Self Ingress Rule"<br>        description = "Self Ingress Rule"<br>        from_port =0<br>        to_port = 0<br>        protocol = "-1"<br>        self = true<br>      },<br>      {<br>        rule_name = "Ingress from IPv4 CIDR"<br>        description = "IPv4 Rule"<br>        from_port = 443<br>        to_port = 443<br>        protocol = "tcp"<br>        cidr_blocks = ["xx.xx.xx.xx/xx", "yy.yy.yy.yy/yy"]<br>      }<br>   ]<br>   egress =[<br>      {<br>        rule_name = "Self Egress Rule"<br>        description = "Self Egress Rule"<br>        from_port =0<br>        to_port = 0<br>        protocol = "-1"<br>        self = true<br>      }<br>   ]<br>} |
+| <a name="additional_sg"></a> [additional_sg](#input\_additional\_sg) | List of Existing Security Group IDs associated with the task or service | `list(string)` | `[]` | no | <pre>[ "sg-xxxxx......", "sg-xxxx4747cv..." ] |
 
 #### ECS Service - Load Balancer Configuration
 ---
 
 - All the below Properties will be ignored if `create_service` is not set `true`
+- Either `load_balancer_arn` or `load_balancer_name` is Requried when `attach_load_balancer` is set true
 
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
 | <a name="attach_load_balancer"></a> [attach_load_balancer](#input\_attach\_load\_balancer) | Flat to decide if ECS service should be attached to load balancer | `bool` | `true` | no |  |
-| <a name="load_balancer_arn"></a> [load_balancer_arn](#input\_load\_balancer\_arn) | ARN of the load balancer | `string` |  | no | Requried when `attach_load_balancer` is set true |
+| <a name="load_balancer_arn"></a> [load_balancer_arn](#input\_load\_balancer\_arn) | ARN of the load balancer | `string` |  | no |  |
+| <a name="load_balancer_name"></a> [load_balancer_name](#input\_load\_balancer\_name) | Name of the load balancer | `string` |  | no |  |
 
 #### ECS Service - Log Management
 ---
@@ -120,7 +124,7 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
-| <a name="create_service_log_group"></a> [create_service_log_group](#input\_create\_service\_log\_group) | Flag to decide if Cloudwatch log group should be ctreated for sending the service logs to | `bool` | `true` | no |  |
+| <a name="create_log_group"></a> [create_log_group](#input\_create\_log\_group) | Flag to decide if Cloudwatch log group should be ctreated for sending the service logs to | `bool` | `true` | no |  |
 | <a name="log_group_retention"></a> [log_group_retention](#input\_log\_group\_retention) | The Log Retention period in days | `number` | `0` | no |  |
 
 #### Tags
@@ -152,9 +156,12 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 
 #### autoscaling_capacity_providers
 
+- Either `asg_name` of `asg_arn` is required; `asg_arn` will take preference over `asg_name`
+
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
 | <a name="name"></a> [name](#input\_name) | Name of the capacity provider. | `string` |  | yes |  |
+| <a name="asg_name"></a> [asg_name](#input\_asg_name) | ASG Name to be used | `string` |  | yes |  |
 | <a name="asg_arn"></a> [asg_arn](#input\_asg_arn) | ASG ARN to be used | `string` |  | yes |  |
 | <a name="managed_termination_protection"></a> [managed_termination_protection](#input\_managed_termination_protection) | Enables or disables container-aware termination of instances in the auto scaling group when scale-in happens.<br>Valid values are `ENABLED` and `DISABLED`. | `string` |  | no |  |
 | <a name="ms_instance_warmup_period"></a> [ms_instance_warmup_period](#input\_ms_instance_warmup_period) | Period of time, in seconds, after a newly launched Amazon EC2 instance can contribute to CloudWatch metrics for Auto Scaling group. | `number` | `300` | no |  |

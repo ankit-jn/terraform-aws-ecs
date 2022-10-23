@@ -8,7 +8,7 @@ resource aws_service_discovery_service "this" {
     dns_config {
         namespace_id = var.namespace_id
 
-        routing_policy = var.service_routing_policy
+        routing_policy = var.routing_policy
         dns_records {
             ttl  = 10
             type = "A"

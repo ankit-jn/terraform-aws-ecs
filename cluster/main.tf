@@ -1,3 +1,10 @@
+data aws_autoscaling_group "this" {
+    for_each = {for k, v in local.autoscaling_capacity_providers: k=>v if (lookup(v, "asg_name", "") != "")}
+
+    name = each.value.asg_name
+}
+
+
 #### Provision ECS Cluster
 resource aws_ecs_cluster "this" {
   
@@ -70,7 +77,8 @@ resource aws_ecs_capacity_provider "this" {
     name = each.key
   
     auto_scaling_group_provider {
-        auto_scaling_group_arn         = each.value.asg_arn
+        auto_scaling_group_arn = (lookup(each.value, "asg_arn", "") != "") ? each.value.asg_arn : (
+                                                                                    data.aws_autoscaling_group.this[each.value.asg_name].arn)
         managed_termination_protection = lookup(each.value, "managed_termination_protection", null)
 
         dynamic "managed_scaling" {

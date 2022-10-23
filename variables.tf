@@ -1,4 +1,4 @@
-variable "create_ecs_cluster" {
+variable "create_cluster" {
   description = "(Optional) Flag to decide if a new ECS cluster should be created"
   type        = bool
   default     = true
@@ -60,6 +60,7 @@ Providers Map where,
 Map Key: Name of the capacity provider.
 Map Value: Configuration map of the provider
   name: (Required) Name of the capacity provider.
+  asg_name: ASG Name to be used
   asg_arn: ASG ARN to be used
   managed_termination_protection:  (Optional) - Enables or disables container-aware termination of instances 
                                   in the auto scaling group when scale-in happens. 
@@ -103,6 +104,14 @@ variable "enable_service_discovery" {
   default     = false
 }
 
+variable "routing_policy" {
+  description = <<EOF
+(Optional) The routing policy that you want to apply to all records that Route 53 creates 
+when register an instance and specify the service. Valid Values: MULTIVALUE, WEIGHTED
+EOF
+  type        = string
+  default     = "MULTIVALUE"
+}
 ##################################################
 ## ECS Service, Task, Permissions Management
 ##################################################
@@ -209,7 +218,7 @@ EOF
 ##################################################
 ## Network configurations for ECS Service/Task
 ##################################################
-variable "service_subnets" {
+variable "subnets" {
     description = "List of subnet IDs associated with the task or service."
     type        = list(string)
     default     = []
@@ -221,19 +230,19 @@ variable "assign_public_ip" {
     default     = false
 }
 
-variable "create_service_sg" {
+variable "create_sg" {
     description = "Flag to decide to create Security Group for ECS service/task"
     type        = bool
     default     = "false"
 }
 
-variable "service_sg_name" {
+variable "sg_name" {
     description = "The name of the Security group"
     type        = string
     default     = ""
 }
 
-variable "service_sg_rules" {
+variable "sg_rules" {
     description = <<EOF
 
 (Optional) Configuration List for Security Group Rules of Security Group:
@@ -264,7 +273,7 @@ EOF
     default = {}
 }
 
-variable "service_additional_sg" {
+variable "additional_sg" {
     description = "(Optional) List of Existing Security Group IDs associated with the task or service."
     type        = list(string)
     default = []
@@ -285,10 +294,16 @@ variable "load_balancer_arn" {
     default     = ""
 }
 
+variable "load_balancer_name" {
+    description = "(Optional) Name of the load balancer"
+    type        = string
+    default     = ""
+}
+
 ##################################################
 ## Log management for ECS Service
 ##################################################
-variable "create_service_log_group" {
+variable "create_log_group" {
     description = "(Optional) Flag to decide if Cloudwatch log group should be ctreated for sending the service logs to"
     type        = bool
     default     = true

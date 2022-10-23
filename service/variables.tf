@@ -51,17 +51,17 @@ variable "service_volumes" {
   type        = list(map(string))
 }
 
-variable "service_min_capacity" {
+variable "min_capacity" {
   description = "Min capacity of the scalable target."
   type        = number
 }
 
-variable "service_max_capacity" {
+variable "max_capacity" {
   description = "Max capacity of the scalable target"
   type        = number
 }
 
-variable "service_desired_capacity" {
+variable "desired_capacity" {
   description = "Number of instances of the task definition to place and keep running"
   type        = number
 }
@@ -84,7 +84,7 @@ variable "ecs_task_role_arn" {
 ##################################################
 ## Network configurations for ECS Service/Task
 ##################################################
-variable "service_subnets" {
+variable "subnets" {
     description = "List of subnet IDs associated with the task or service."
     type        = list(string)
 }
@@ -118,7 +118,7 @@ variable "load_balancer_arn" {
 ##################################################
 ## Log management for ECS Service
 ##################################################
-variable "create_service_log_group" {
+variable "create_log_group" {
   description = "(Optional, default true) Create a cloudwatch log group to send the service logs"
   type        = bool
 }
@@ -143,7 +143,7 @@ variable "namespace_id" {
   default     = null
 }
 
-variable "service_routing_policy" {
+variable "routing_policy" {
   description = <<EOF
 (Optional) The routing policy that you want to apply to all records that Route 53 creates 
 when register an instance and specify the service. Valid Values: MULTIVALUE, WEIGHTED

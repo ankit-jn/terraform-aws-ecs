@@ -1,7 +1,7 @@
 module "ecs_cluster" {
     source = "./cluster"
 
-    count = var.create_ecs_cluster ? 1 : 0
+    count = var.create_cluster ? 1 : 0
 
     cluster_name    = var.cluster_name
     use_fargate     = var.use_fargate
@@ -41,13 +41,13 @@ resource aws_service_discovery_private_dns_namespace "this" {
 module "ecs_security_group" {
     source = "git::https://github.com/arjstack/terraform-aws-security-groups.git?ref=v1.0.0"
 
-    count = (var.create_service && var.create_service_sg) ? 1 : 0
+    count = (var.create_service && var.create_sg) ? 1 : 0
 
     vpc_id = var.vpc_id
-    name = var.service_sg_name
+    name = var.sg_name
 
-    ingress_rules = local.service_sg_ingress_rules
-    egress_rules  = local.service_sg_egress_rules
+    ingress_rules = local.sg_ingress_rules
+    egress_rules  = local.sg_egress_rules
 }
 
 ## ECS Service
@@ -57,7 +57,7 @@ module "ecs_service" {
     count = var.create_service ? 1 : 0
     
     cluster_name = var.cluster_name
-    cluster_arn  = local.ecs_cluster_arn
+    cluster_arn  = local.cluster_arn
     use_fargate  = var.use_fargate    
     aws_region = var.aws_region
     account_id = data.aws_caller_identity.current.account_id
@@ -78,22 +78,22 @@ module "ecs_service" {
     container_configurations = var.container_configurations
 
     ## Network Configurations
-    service_subnets = var.service_subnets
+    subnets = var.subnets
     assign_public_ip = var.assign_public_ip
     security_groups = local.service_security_groups
     
     ## Load Balancer Configurations
     attach_load_balancer = var.attach_load_balancer
-    load_balancer_arn    = var.load_balancer_arn
+    load_balancer_arn    = var.attach_load_balancer ? data.aws_lb.this[0].arn : null
     
     ## Log Management
-    create_service_log_group    = var.create_service_log_group
+    create_log_group    = var.create_log_group
     log_group_retention         = var.log_group_retention
 
     ## Service Discovery
     enable_service_discovery    = var.enable_service_discovery
     namespace_id                = local.namespace_id
-
+    routing_policy              = var.routing_policy
     ## Tags
     default_tags = var.default_tags
 }

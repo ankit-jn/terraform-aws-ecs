@@ -7,8 +7,8 @@ resource aws_appautoscaling_target "this" {
   resource_id        = "service/${var.cluster_name}/${aws_ecs_service.this.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   role_arn           = local.ecs_autoscale_role
-  min_capacity       = var.service_min_capacity
-  max_capacity       = var.service_max_capacity
+  min_capacity       = var.min_capacity
+  max_capacity       = var.max_capacity
 }
 
 # Automatically scale capacity up by one
