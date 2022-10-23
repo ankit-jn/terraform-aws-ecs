@@ -88,8 +88,7 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 | <a name="ecs_task_policies"></a> [ecs_task_policies](#ecs\_policy) | List of Policies to be attached with ECS Task container  | `string` |  | no | <pre>[<br>   {<br>     "name" = "arjstack-custom-policy"<br>   },<br>   {<br>     "name"  = "AWSCloudTrail_ReadOnlyAccess"<br>     "arn"   = "arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess"<br>   }<br>]<br> |
 | <a name="ecs_task_execution_policies"></a> [ecs_task_execution_policies](#ecs\_policy) | List of Policies to be attached with ECS Task Execution | `string` |  | no | Same as `ecs_task_policies` |
 | <a name="enable_service_discovery"></a> [enable_service_discovery](#input\_enable\_service\_discovery) | Flag to decide if service needs to be registered with service discovery namespace | `bool` | `false` | no |  |
-| <a name="routing_policy"></a> [routing_policy](#input\_routing\_policy) | The routing policy that you want to apply to all records that Route 53 creates 
-when register an instance and specify the service | `string` | `MULTIVALUE` | no |  |
+| <a name="routing_policy"></a> [routing_policy](#input\_routing\_policy) | The routing policy that you want to apply to all records that Route 53 creates when register an instance and specify the service | `string` | `MULTIVALUE` | no |  |
 
 #### ECS Service - Network Configuration
 ---
@@ -98,12 +97,12 @@ when register an instance and specify the service | `string` | `MULTIVALUE` | no
 
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
-| <a name="subnets"></a> [subnets](#input\_subnets) | List of subnet IDs associated with the task or service. | `list(string)` |  | yes | <pre>[ "subnet-xxxxx......", "subnet-xxxx4747cv..." ] |
+| <a name="subnets"></a> [subnets](#input\_subnets) | List of subnet IDs associated with the task or service. | `list(string)` |  | yes | <pre>[<br>   "subnet-xxxxx......",<br>   "subnet-xxxx4747cv..."<br>] |
 | <a name="assign_public_ip"></a> [assign_public_ip](#input\_assign\_public\_ip) | Assign a public IP address to the ENI (Fargate launch type only) | `bool` | `false` | no |  |
 | <a name="create_sg"></a> [create_sg](#input\_create\_sg) | Flag to decide to create Security Group for ECS service/task | `bool` | `false` | no |  |
 | <a name="sg_name"></a> [sg_name](#input\_sg\_name) | The name of the Security group | `string` |  | no | Required when `create_service_sg` is set true |
-| <a name="sg_rules"></a> [sg_rules](#input\_sg\_rules) | Map of Security Group Rules mapped with 2 Keys `ingress` and `egress`. <br>The value for each key will be a list of Security group rules where each entry of the list will again be a map of Rule configuration | `map` | `{}` | no | <pre>{<br>   ingress = [<br>      {<br>        rule_name = "Self Ingress Rule"<br>        description = "Self Ingress Rule"<br>        from_port =0<br>        to_port = 0<br>        protocol = "-1"<br>        self = true<br>      },<br>      {<br>        rule_name = "Ingress from IPv4 CIDR"<br>        description = "IPv4 Rule"<br>        from_port = 443<br>        to_port = 443<br>        protocol = "tcp"<br>        cidr_blocks = ["xx.xx.xx.xx/xx", "yy.yy.yy.yy/yy"]<br>      }<br>   ]<br>   egress =[<br>      {<br>        rule_name = "Self Egress Rule"<br>        description = "Self Egress Rule"<br>        from_port =0<br>        to_port = 0<br>        protocol = "-1"<br>        self = true<br>      }<br>   ]<br>} |
-| <a name="additional_sg"></a> [additional_sg](#input\_additional\_sg) | List of Existing Security Group IDs associated with the task or service | `list(string)` | `[]` | no | <pre>[ "sg-xxxxx......", "sg-xxxx4747cv..." ] |
+| <a name="sg_rules"></a> [sg_rules](#input\_sg\_rules) | Map of Security Group Rules mapped with 2 Keys `ingress` and `egress`. <br>The value for each key will be a list of Security group rules where each entry of the list will again be a map of Rule configuration | `map` | `{}` | no | <pre>{<br>   ingress = [<br>      {<br>        rule_name = "Self Ingress Rule"<br>        description = "Self Ingress Rule"<br>        from_port =0<br>        to_port = 0<br>        protocol = "-1"<br>        self = true<br>      },<br>      {<br>        rule_name = "Ingress from IPv4 CIDR"<br>        description = "IPv4 Rule"<br>        from_port = 443<br>        to_port = 443<br>        protocol = "tcp"<br>        cidr_blocks = [<br>          "xx.xx.xx.xx/xx",<br>          "yy.yy.yy.yy/yy"<br>        ]<br>      }<br>   ]<br>   egress =[<br>      {<br>        rule_name = "Self Egress Rule"<br>        description = "Self Egress Rule"<br>        from_port =0<br>        to_port = 0<br>        protocol = "-1"<br>        self = true<br>      }<br>   ]<br>} |
+| <a name="additional_sg"></a> [additional_sg](#input\_additional\_sg) | List of Existing Security Group IDs associated with the task or service | `list(string)` | `[]` | no | <pre>[<br>   "sg-xxxxx......",<br>   "sg-xxxx4747cv..."<br>] |
 
 #### ECS Service - Load Balancer Configuration
 ---
