@@ -27,7 +27,7 @@ resource aws_ecs_task_definition "this" {
     execution_role_arn         = var.ecs_task_execution_role_arn
     task_role_arn              = var.ecs_task_role_arn
     
-    container_definitions    = data.template_file.container_def.rendered
+    container_definitions = coalesce(var.container_definition, data.template_file.container_def.rendered)
     
     dynamic "volume" {
       for_each = var.service_volumes
@@ -71,12 +71,12 @@ resource aws_ecs_service "this" {
     }
 
     dynamic "load_balancer" {
-        for_each = var.attach_load_balancer ? [1] : []
+        for_each = var.attach_load_balancer ? var.load_balancer_configs : {}
 
         content {
-            target_group_arn = var.load_balancer_arn
-            container_name   = var.container_configurations.name
-            container_port   = var.container_configurations.container_port
+            target_group_arn = data.aws_lb_target_group.this[load_balancer.key].arn
+            container_name   = load_balancer.value.container_name
+            container_port   = load_balancer.value.container_port
         }
     }
 
@@ -84,6 +84,16 @@ resource aws_ecs_service "this" {
       { "Name" = "svc-${var.service_name}" },
       var.default_tags
     )
+}
+
+data aws_lb_target_group "this" {
+  for_each = var.attach_load_balancer ? var.load_balancer_configs : {}
+
+  name = each.value.target_group_name
+}
+
+locals{
+
 }
 
 # Create CloudWatch group and log stream

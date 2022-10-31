@@ -14,11 +14,3 @@ data aws_service_discovery_dns_namespace "this" {
   name = var.dns_name
   type = "DNS_PRIVATE"
 }
-
-data aws_lb "this" {
-
-    count = var.attach_load_balancer ? 1 : 0
-
-    arn =  can(var.load_balancer_arn) && var.load_balancer_arn != "" ? var.load_balancer_arn : null
-    name =  can(var.load_balancer_name) && var.load_balancer_name != "" ? var.load_balancer_name : null
-}

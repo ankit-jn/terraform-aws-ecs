@@ -25,12 +25,12 @@ output "task_definition_arn" {
 
 output "ecs_task_role" {
     description = "IAM Role for ECS Task with trusted Entity - ECS Task Service"
-    value = var.create_service ? module.iam_ecs[0].service_linked_roles["ecs-task"] : ""
+    value = var.create_service ? module.iam_ecs[0].service_linked_roles["ecs-task"] : null
 }
 
 output "ecs_task_execution_role" {
     description = "IAM Role for ECS Task Exeution with trusted Entity - ECS Task Service"
-    value = var.create_service ? module.iam_ecs[0].service_linked_roles["ecs-task-execution"] : ""
+    value = var.create_service ? module.iam_ecs[0].service_linked_roles["ecs-task-execution"] : null
 }
 
 output "service_log_group_name" {

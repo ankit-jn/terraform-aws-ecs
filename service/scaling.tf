@@ -34,7 +34,7 @@ resource aws_appautoscaling_policy "asg_policy_up" {
 
 # Automatically scale capacity down by one
 resource aws_appautoscaling_policy "asg_policy_down" {
-  name               = "${aws_ecs_service.this.name}-down"
+  name               = "${aws_ecs_service.this.name}-asg-down"
   service_namespace  = aws_appautoscaling_target.this.service_namespace
   resource_id        = aws_appautoscaling_target.this.resource_id
   scalable_dimension = aws_appautoscaling_target.this.scalable_dimension

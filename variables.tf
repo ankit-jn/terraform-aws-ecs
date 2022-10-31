@@ -189,6 +189,10 @@ EOF
     default = {}
 }
 
+variable "container_definition" {
+    description = "The container definition used by Container"
+    default = null
+}
 variable "policies" {
   description = <<EOF
 List of Policies to be provisioned where each entry will be a map for Policy configuration
@@ -288,16 +292,9 @@ variable "attach_load_balancer" {
     default     = false
 }
 
-variable "load_balancer_arn" {
-    description = "(Optional) ARN of the load balancer"
-    type        = string
-    default     = ""
-}
-
-variable "load_balancer_name" {
-    description = "(Optional) Name of the load balancer"
-    type        = string
-    default     = ""
+variable "load_balancer_configs" {
+    description = "(Optional) Target Group confgiurations for Service load balancing"
+    default     = {}
 }
 
 ##################################################

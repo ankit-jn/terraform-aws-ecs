@@ -73,6 +73,7 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 ---
 
 - All the below Properties will be ignored if `create_service` is not set `true`
+- Either input `container_definition` or configure properties for `container_configurations`. `container_definition` will take preference over `container_configurations`.
 
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
@@ -84,6 +85,7 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 | <a name="service_task_pid_mode"></a> [service_task_pid_mode](#input\_service\_task_pid\_mode) | Process namespace to use for the containers in the task. | `string` |  | no |  |
 | <a name="service_volumes"></a> [service_volumes](#service\_volumes) | A list of volumes that containers in the service may use | `list(map(string))` | `[]` | no |  |
 | <a name="container_configurations"></a> [container_configurations](#container\_configurations) | The Configurations used by Container | `map` |  | yes |  |
+| <a name="container_definition"></a> [container_definition](#input\_container\_definition) | The Container definition | `map` |  | yes |  |
 | <a name="policies"></a> [policies](#policy) | List of Policies to be provisioned | `[]` |  | no |  |
 | <a name="ecs_task_policies"></a> [ecs_task_policies](#ecs\_policy) | List of Policies to be attached with ECS Task container  | `string` |  | no | <pre>[<br>   {<br>     "name" = "arjstack-custom-policy"<br>   },<br>   {<br>     "name"  = "AWSCloudTrail_ReadOnlyAccess"<br>     "arn"   = "arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess"<br>   }<br>]<br> |
 | <a name="ecs_task_execution_policies"></a> [ecs_task_execution_policies](#ecs\_policy) | List of Policies to be attached with ECS Task Execution | `string` |  | no | Same as `ecs_task_policies` |
@@ -108,13 +110,12 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 ---
 
 - All the below Properties will be ignored if `create_service` is not set `true`
-- Either `load_balancer_arn` or `load_balancer_name` is Requried when `attach_load_balancer` is set true
+- `load_balancer_configs` is required when `attach_load_balancer` is set true
 
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
 | <a name="attach_load_balancer"></a> [attach_load_balancer](#input\_attach\_load\_balancer) | Flat to decide if ECS service should be attached to load balancer | `bool` | `true` | no |  |
-| <a name="load_balancer_arn"></a> [load_balancer_arn](#input\_load\_balancer\_arn) | ARN of the load balancer | `string` |  | no |  |
-| <a name="load_balancer_name"></a> [load_balancer_name](#input\_load\_balancer\_name) | Name of the load balancer | `string` |  | no |  |
+| <a name="load_balancer_configs"></a> [load_balancer_configs](#input\_load\_balancer\_configs) | Map of Target Group confgiurations for Service load balancing | `map` | `{}` | no |  |
 
 #### ECS Service - Log Management
 ---

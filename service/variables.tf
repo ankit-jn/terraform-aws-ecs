@@ -70,6 +70,10 @@ variable "container_configurations" {
     description = "The Configurations used by Container"
 }
 
+variable "container_definition" {
+    description = "The container definition used by Container"
+}
+
 
 variable "ecs_task_execution_role_arn" {
     description = "ECS Task Execution Role ARN"
@@ -97,7 +101,6 @@ variable "security_groups" {
 variable "assign_public_ip" {
     description = "(Optional, Required only for FARGATE) Assign a public IP address to the ENI (Fargate launch type only)."
     type        = bool
-    default     = false
 }
 
 ##################################################
@@ -106,13 +109,10 @@ variable "assign_public_ip" {
 variable "attach_load_balancer" {
     description = "(Optional) Decision if ECS service should be attached to load balancer"
     type        = bool
-    default     = true
 }
 
-variable "load_balancer_arn" {
-    description = "(Optional) ARN of the load balancer"
-    type        = string
-    default     = ""
+variable "load_balancer_configs" {
+    description = "(Optional) Target Group confgiurations for Service load balancing"
 }
 
 ##################################################
@@ -134,13 +134,11 @@ variable "log_group_retention" {
 variable "enable_service_discovery" {
   description = "Decide if service should discovery should be enabled"
   type        = bool
-  default     = false
 }
 
 variable "namespace_id" {
   description = "The ID of the namespace to use for DNS configuration."
   type        = string
-  default     = null
 }
 
 variable "routing_policy" {
@@ -149,7 +147,6 @@ variable "routing_policy" {
 when register an instance and specify the service. Valid Values: MULTIVALUE, WEIGHTED
 EOF
   type        = string
-  default     = "MULTIVALUE"
 }
 
 ##################################################

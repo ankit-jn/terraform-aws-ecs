@@ -75,7 +75,8 @@ module "ecs_service" {
 
     service_volumes = var.service_volumes
     
-    container_configurations = var.container_configurations
+    container_configurations    = var.container_configurations
+    container_definition        = var.container_definition
 
     ## Network Configurations
     subnets = var.subnets
@@ -83,8 +84,8 @@ module "ecs_service" {
     security_groups = local.security_groups
     
     ## Load Balancer Configurations
-    attach_load_balancer = var.attach_load_balancer
-    load_balancer_arn    = var.attach_load_balancer ? data.aws_lb.this[0].arn : null
+    attach_load_balancer    = var.attach_load_balancer
+    load_balancer_configs   = var.attach_load_balancer ? var.load_balancer_configs : {}
     
     ## Log Management
     create_log_group    = var.create_log_group
