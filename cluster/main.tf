@@ -67,6 +67,10 @@ resource aws_ecs_cluster_capacity_providers "this" {
             base = try(capacity_provider.value.default_strategy.base, null)
         }
     }
+
+    depends_on = [
+      aws_ecs_cluster.this
+    ]
 }
 
 ## Provision ASG Based Capacity Providers

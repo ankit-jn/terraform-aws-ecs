@@ -1,5 +1,5 @@
 locals {
-    cluster_arn = var.create_ecs_cluster ? module.ecs_cluster[0].cluster_arn : data.aws_ecs_cluster.this[0].arn
+    cluster_arn = var.create_cluster ? module.ecs_cluster[0].cluster_arn : data.aws_ecs_cluster.this[0].arn
 
     namespace_id = var.create_dns_namespace ? aws_service_discovery_private_dns_namespace.this[0].id : try(data.aws_service_discovery_dns_namespace.this[0].id, "")
     namespace_arn = var.create_dns_namespace ? aws_service_discovery_private_dns_namespace.this[0].arn : try(data.aws_service_discovery_dns_namespace.this[0].arn, "")

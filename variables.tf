@@ -285,7 +285,7 @@ variable "additional_sg" {
 variable "attach_load_balancer" {
     description = "(Optional) Flat to decide if ECS service should be attached to load balancer"
     type        = bool
-    default     = true
+    default     = false
 }
 
 variable "load_balancer_arn" {

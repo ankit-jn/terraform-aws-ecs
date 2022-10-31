@@ -1,6 +1,6 @@
 output "cluster_arn" {
   description = "The ID/ARN of the ECS cluster"
-  value       = local.ecs_cluster_arn
+  value       = local.cluster_arn
 }
 
 output "service_discovery_namespace_id" {

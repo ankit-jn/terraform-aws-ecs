@@ -63,9 +63,9 @@ module "ecs_service" {
     account_id = data.aws_caller_identity.current.account_id
 
     service_name = var.service_name
-    service_min_capacity = lookup(var.service_scalability, "min_capacity", 1)
-    service_max_capacity = lookup(var.service_scalability, "max_capacity", lookup(var.service_scalability, "min_capacity", 1))
-    service_desired_capacity = lookup(var.service_scalability, "desired_capacity", lookup(var.service_scalability, "min_capacity", 1))
+    min_capacity = lookup(var.service_scalability, "min_capacity", 1)
+    max_capacity = lookup(var.service_scalability, "max_capacity", lookup(var.service_scalability, "min_capacity", 1))
+    desired_capacity = lookup(var.service_scalability, "desired_capacity", lookup(var.service_scalability, "min_capacity", 1))
     launch_type = var.service_launch_type
     
     service_task_network_mode   = var.service_task_network_mode
@@ -80,7 +80,7 @@ module "ecs_service" {
     ## Network Configurations
     subnets = var.subnets
     assign_public_ip = var.assign_public_ip
-    security_groups = local.service_security_groups
+    security_groups = local.security_groups
     
     ## Load Balancer Configurations
     attach_load_balancer = var.attach_load_balancer
