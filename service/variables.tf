@@ -72,6 +72,7 @@ variable "container_configurations" {
 
 variable "container_definition" {
     description = "The container definition used by Container"
+    type = string
 }
 
 

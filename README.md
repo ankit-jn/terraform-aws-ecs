@@ -84,8 +84,8 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 | <a name="service_task_network_mode"></a> [service_task_network_mode](#input\_service\_task\_network\_mode) | The network mode used by the containers in the ECS Service Task. | `string` | `awsvpc` | no |  |
 | <a name="service_task_pid_mode"></a> [service_task_pid_mode](#input\_service\_task_pid\_mode) | Process namespace to use for the containers in the task. | `string` |  | no |  |
 | <a name="service_volumes"></a> [service_volumes](#service\_volumes) | A list of volumes that containers in the service may use | `list(map(string))` | `[]` | no |  |
-| <a name="container_configurations"></a> [container_configurations](#container\_configurations) | The Configurations used by Container | `map` |  | yes |  |
-| <a name="container_definition"></a> [container_definition](#input\_container\_definition) | The Container definition | `map` |  | yes |  |
+| <a name="container_configurations"></a> [container_configurations](#container\_configurations) | The Configurations used by Container | `map` |  | no |  |
+| <a name="container_definition"></a> [container_definition](#input\_container\_definition) | The Container definition | `string` | `""` | no |  |
 | <a name="policies"></a> [policies](#policy) | List of Policies to be provisioned | `[]` |  | no |  |
 | <a name="ecs_task_policies"></a> [ecs_task_policies](#ecs\_policy) | List of Policies to be attached with ECS Task container  | `string` |  | no | <pre>[<br>   {<br>     "name" = "arjstack-custom-policy"<br>   },<br>   {<br>     "name"  = "AWSCloudTrail_ReadOnlyAccess"<br>     "arn"   = "arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess"<br>   }<br>]<br> |
 | <a name="ecs_task_execution_policies"></a> [ecs_task_execution_policies](#ecs\_policy) | List of Policies to be attached with ECS Task Execution | `string` |  | no | Same as `ecs_task_policies` |
