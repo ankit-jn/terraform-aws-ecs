@@ -191,8 +191,9 @@ EOF
 
 variable "container_definition" {
     description = "The container definition used by Container"
-    default = null
+    default = ""
 }
+
 variable "policies" {
   description = <<EOF
 List of Policies to be provisioned where each entry will be a map for Policy configuration

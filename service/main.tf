@@ -1,4 +1,7 @@
 data template_file "container_def" {
+
+    count = var.container_definition == "" ? 1 : 0
+
     template = file("${path.module}/containers/container.json.tpl")
 
     vars = {
@@ -22,12 +25,12 @@ resource aws_ecs_task_definition "this" {
     network_mode               = var.service_task_network_mode
     pid_mode                   = var.service_task_pid_mode
     requires_compatibilities   = [var.use_fargate ? "FARGATE" : "EC2"]
-    cpu                        = lookup(var.container_configurations, "cpu", 1024)
-    memory                     = lookup(var.container_configurations, "memory", 1024)
+    cpu                        = lookup(var.container_configurations, "cpu", 256)
+    memory                     = lookup(var.container_configurations, "memory", 512)
     execution_role_arn         = var.ecs_task_execution_role_arn
     task_role_arn              = var.ecs_task_role_arn
     
-    container_definitions = coalesce(var.container_definition, data.template_file.container_def.rendered)
+    container_definitions = (var.container_definition == "") ? data.template_file.container_def[0].rendered : var.container_definition
     
     dynamic "volume" {
       for_each = var.service_volumes
