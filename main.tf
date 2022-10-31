@@ -70,6 +70,9 @@ module "ecs_service" {
     
     service_task_network_mode   = var.service_task_network_mode
     service_task_pid_mode       = var.service_task_pid_mode
+    service_task_cpu            = var.service_task_cpu
+    service_task_memory         = var.service_task_memory
+    
     ecs_task_execution_role_arn = module.iam_ecs[0].service_linked_roles["ecs-task-execution"].arn
     ecs_task_role_arn           = module.iam_ecs[0].service_linked_roles["ecs-task"].arn
 

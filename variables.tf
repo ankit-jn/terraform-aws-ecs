@@ -166,6 +166,18 @@ variable "service_task_pid_mode" {
   type        = string
 }
 
+variable "service_task_cpu" {
+  description = "(Optional) Number of cpu units used by the task."
+  type        = number
+  default     = null
+}
+
+variable "service_task_memory" {
+  description = "(Optional) Amount, in MiB, of memory used by the task."
+  type        = number
+  default     = null
+}
+
 variable "service_volumes" {
   description = "A list of volumes that containers in the service may use."
   type        = list(map(string))
@@ -181,8 +193,8 @@ image: (Required) Docker Image to be deployed in the container
 container_port: (Required) Container Port
 host_port: (Required) Host Port
 
-cpu: (Optional, default 1024) CPU assigned to container
-memory: (Optional, default 1024) Memory assigned to container
+cpu: (Required) CPU assigned to container
+memory: (Required) Memory assigned to container
 
 log_group: (Optional, default null) The Cloudwatch log group for the logs to be sent to
 EOF

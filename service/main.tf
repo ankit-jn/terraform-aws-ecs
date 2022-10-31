@@ -10,8 +10,8 @@ data template_file "container_def" {
       container_port  = var.container_configurations.container_port
       host_port       = var.container_configurations.host_port
 
-      cpu             = lookup(var.container_configurations, "cpu", 1024)
-      memory          = lookup(var.container_configurations, "memory", 1024)
+      cpu             = var.container_configurations.cpu
+      memory          = var.container_configurations.memory
       
       region          = var.aws_region
       log_group       = var.create_log_group ? aws_cloudwatch_log_group.this[0].name : ""   
@@ -25,8 +25,8 @@ resource aws_ecs_task_definition "this" {
     network_mode               = var.service_task_network_mode
     pid_mode                   = var.service_task_pid_mode
     requires_compatibilities   = [var.use_fargate ? "FARGATE" : "EC2"]
-    cpu                        = lookup(var.container_configurations, "cpu", 256)
-    memory                     = lookup(var.container_configurations, "memory", 512)
+    cpu                        = var.service_task_cpu
+    memory                     = var.service_task_memory
     execution_role_arn         = var.ecs_task_execution_role_arn
     task_role_arn              = var.ecs_task_role_arn
     

@@ -74,6 +74,7 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 
 - All the below Properties will be ignored if `create_service` is not set `true`
 - Either input `container_definition` or configure properties for `container_configurations`. `container_definition` will take preference over `container_configurations`.
+- `service_task_cpu` and `service_task_memory` are required when `requires_compatibilities` is `FARGATE`.
 
 | Name | Description | Type | Default | Required | Example|
 |:------|:------|:------|:------|:------:|:------|
@@ -82,7 +83,9 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 | <a name="service_scalability"></a> [service_scalability](#service\_scalability) | The scalability matrix configuration map for ECS servcie | `map(number)` | <pre>{<br>   min_capacity = 1<br>   max_capacity = 1<br>   desired_capacity = 1<br>}<pre> | no |  |
 | <a name="service_launch_type"></a> [service_launch_type](#input\_service\_launch\_type) | Launch type on which to run your service.<br>`FARGATE` will automatically be set if `use_fargate` is set true  | `string` | `EC2` | no |  |
 | <a name="service_task_network_mode"></a> [service_task_network_mode](#input\_service\_task\_network\_mode) | The network mode used by the containers in the ECS Service Task. | `string` | `awsvpc` | no |  |
-| <a name="service_task_pid_mode"></a> [service_task_pid_mode](#input\_service\_task_pid\_mode) | Process namespace to use for the containers in the task. | `string` |  | no |  |
+| <a name="service_task_pid_mode"></a> [service_task_pid_mode](#input\_service\_task\_pid\_mode) | Process namespace to use for the containers in the task. | `string` |  | no |  |
+| <a name="service_task_cpu"></a> [service_task_cpu](#input\_service\_task\_cpu) | Number of cpu units used by the task. | `number` |  | no |  |
+| <a name="service_task_memory"></a> [service_task_memory](#input\_service\_task\_memory) | Amount, in MiB, of memory used by the task. | `number` |  | no |  |
 | <a name="service_volumes"></a> [service_volumes](#service\_volumes) | A list of volumes that containers in the service may use | `list(map(string))` | `[]` | no |  |
 | <a name="container_configurations"></a> [container_configurations](#container\_configurations) | The Configurations used by Container | `map` |  | no |  |
 | <a name="container_definition"></a> [container_definition](#input\_container\_definition) | The Container definition | `string` | `""` | no |  |
@@ -194,8 +197,8 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 | <a name="image"></a> [image](#input\_image) | Docker Image to be deployed in the container | `string` |  | yes |  |
 | <a name="container_port"></a> [container_port](#input\_container_port) | Container Port | `number` |  | yes |  |
 | <a name="host_port"></a> [host_port](#input\_host_port) | Host Port | `number` |  | yes |  |
-| <a name="cpu"></a> [cpu](#input\_cpu) | CPU assigned to container | `string` | `1024` | no |  |
-| <a name="memory"></a> [memory](#input\_memory) | Memory assigned to container | `string` | `1024` | no |  |
+| <a name="cpu"></a> [cpu](#input\_cpu) | CPU assigned to container | `number` |  | yes |  |
+| <a name="memory"></a> [memory](#input\_memory) | Memory assigned to container | `number` |  | yes |  |
 | <a name="log_group"></a> [log_group](#input\_log_group) | Cloudwatch log group for the logs to be sent to | `string` |  | no |  |
 
 #### policy

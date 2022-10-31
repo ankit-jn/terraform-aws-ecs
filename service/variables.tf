@@ -46,6 +46,16 @@ variable "service_task_pid_mode" {
   type        = string
 }
 
+variable "service_task_cpu" {
+  description = "Number of cpu units used by the task."
+  type        = number
+}
+
+variable "service_task_memory" {
+  description = "Amount (in MiB) of memory used by the task."
+  type        = number
+}
+
 variable "service_volumes" {
   description = "A list of volumes that containers in the service may use."
   type        = list(map(string))
@@ -74,7 +84,6 @@ variable "container_definition" {
     description = "The container definition used by Container"
     type = string
 }
-
 
 variable "ecs_task_execution_role_arn" {
     description = "ECS Task Execution Role ARN"
