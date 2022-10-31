@@ -69,7 +69,8 @@ resource aws_ecs_cluster_capacity_providers "this" {
     }
 
     depends_on = [
-      aws_ecs_cluster.this
+      aws_ecs_cluster.this,
+      aws_ecs_capacity_provider.this
     ]
 }
 
@@ -82,7 +83,7 @@ resource aws_ecs_capacity_provider "this" {
   
     auto_scaling_group_provider {
         auto_scaling_group_arn = (lookup(each.value, "asg_arn", "") != "") ? each.value.asg_arn : (
-                                                                                    data.aws_autoscaling_group.this[each.value.asg_name].arn)
+                                                                                    data.aws_autoscaling_group.this[each.value.name].arn)
         managed_termination_protection = lookup(each.value, "managed_termination_protection", null)
 
         dynamic "managed_scaling" {
