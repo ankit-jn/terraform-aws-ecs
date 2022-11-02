@@ -255,6 +255,7 @@ Policy content to be add to the new policy (i.e. the policy for which arn is not
 | <a name="service_log_group_arn"></a> [service_log_group_arn](#output\_service\_log\_group\_arn) | `string` | ARN of the Cloudwatch log Group for ECS Service |
 | <a name="service_discovery_id"></a> [service_discovery_id](#output\_service\_discovery\_id) | `string` | ID of Service Discovery |
 | <a name="service_discovery_arn"></a> [service_discovery_arn](#output\_service\_discovery\_arn) | `string` | ARN of Service Discovery |
+| <a name="sg_id"></a> [sg_id](#output\_sg\_id) | `string` | The Security Group ID associated to ECS service/task |
 
 ## Authors
 

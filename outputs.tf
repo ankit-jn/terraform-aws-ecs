@@ -53,7 +53,7 @@ output "service_discovery_arn" {
     value = var.create_service ? module.ecs_service[0].servcie_discovery_arn : ""
 }
 
-output sg_id {
-    description = "The Security Group ID"
+output "sg_id" {
+    description = "The Security Group ID associated to ECS service/task"
     value       = (var.create_service && var.create_sg) ? module.ecs_security_group[0].security_group_id : ""
 }
