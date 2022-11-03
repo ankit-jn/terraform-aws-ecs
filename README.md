@@ -221,7 +221,8 @@ Policy content to be add to the new policy (i.e. the policy for which arn is not
 | <a name="name"></a> [name](#input\_name) | Policy Name | `string` |  | yes |  |
 | <a name="arn"></a> [arn](#input\_arn) | Policy ARN (if existing policy) | `string` |  | no |  |
 
-#### sg_rules [ Ingress / Egress ]
+#### sg_rules 
+[ Ingress / Egress ]
 
 - `cidr_blocks` Cannot be specified with `source_security_group_id` or `self`.
 - `ipv6_cidr_blocks` Cannot be specified with `source_security_group_id` or `self`.
