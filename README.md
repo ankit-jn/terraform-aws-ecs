@@ -115,91 +115,91 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 - All the below Properties will be ignored if `create_service` is not set `true`
 - `load_balancer_configs` is required when `attach_load_balancer` is set true
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="attach_load_balancer"></a> [attach_load_balancer](#input\_attach\_load\_balancer) | Flat to decide if ECS service should be attached to load balancer | `bool` | `true` | no |  |
-| <a name="load_balancer_configs"></a> [load_balancer_configs](#input\_load\_balancer\_configs) | Map of Target Group confgiurations for Service load balancing | `map` | `{}` | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="attach_load_balancer"></a> [attach_load_balancer](#input\_attach\_load\_balancer) | Flat to decide if ECS service should be attached to load balancer | `bool` | `true` | no |
+| <a name="load_balancer_configs"></a> [load_balancer_configs](#input\_load\_balancer\_configs) | Map of Target Group confgiurations for Service load balancing | `map` | `{}` | no |
 
 #### ECS Service - Log Management
 ---
 
 - All the below Properties will be ignored if `create_service` is not set `true`
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="create_log_group"></a> [create_log_group](#input\_create\_log\_group) | Flag to decide if Cloudwatch log group should be ctreated for sending the service logs to | `bool` | `true` | no |  |
-| <a name="log_group_retention"></a> [log_group_retention](#input\_log\_group\_retention) | The Log Retention period in days | `number` | `0` | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="create_log_group"></a> [create_log_group](#input\_create\_log\_group) | Flag to decide if Cloudwatch log group should be ctreated for sending the service logs to | `bool` | `true` | no |
+| <a name="log_group_retention"></a> [log_group_retention](#input\_log\_group\_retention) | The Log Retention period in days | `number` | `0` | no |
 
 #### Tags
 ---
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="default_tags"></a> [default_tags](#input\_default\_tags) | A map of tags to assign to all the resource. | `map` | `{}` | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="default_tags"></a> [default_tags](#input\_default\_tags) | A map of tags to assign to all the resource. | `map` | `{}` | no |
 
 ## Nested Configuration Maps:  
 
 #### execute_command_configurations
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="kms_key_id"></a> [kms_key_id](#input\_kms\_key\_id) | The AWS Key Management Service key ID to encrypt the data between the local client and the container. | `string` | `null` | no |  |
-| <a name="logging"></a> [logging](#input\_logging) | The log setting to use for redirecting logs for your execute command results.<br>Valid values are NONE, DEFAULT and OVERRIDE | `string` | `"DEFAULT"` | no |  |
-| <a name="log_configuration"></a> [log_configuration](#log\_configuration) | The log configuration (5 points below) for the results of the execute command actions Required when logging is OVERRIDE. | `map` |  | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="kms_key_id"></a> [kms_key_id](#input\_kms\_key\_id) | The AWS Key Management Service key ID to encrypt the data between the local client and the container. | `string` | `null` | no |
+| <a name="logging"></a> [logging](#input\_logging) | The log setting to use for redirecting logs for your execute command results.<br>Valid values are NONE, DEFAULT and OVERRIDE | `string` | `"DEFAULT"` | no |
+| <a name="log_configuration"></a> [log_configuration](#log\_configuration) | The log configuration (5 points below) for the results of the execute command actions Required when logging is OVERRIDE. | `map` |  | no |
 
 #### log_configuration
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="cloudwatch_encryption_enabled"></a> [cloudwatch_encryption_enabled](#input\_cloudwatch\_encryption\_enabled) | Whether or not to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled. | `string` | `null` | no |  |
-| <a name="cloudwatch_log_group_name"></a> [cloudwatch_log_group_name](#input\_cloudwatch\_log\_group\_name) | The name of the CloudWatch log group to send logs to. | `string` |  | no |  |
-| <a name="s3_bucket_name"></a> [s3_bucket_name](#input\_s3\_bucket\_name) | The name of the S3 bucket to send logs to. | `string` |  | no |  |
-| <a name="s3_bucket_encryption_enabled"></a> [s3_bucket_encryption_enabled](#input\_s3\_bucket\_encryption\_enabled) | Whether or not to enable encryption on the logs sent to S3. If not specified, encryption will be disabled. | `bool` |  | no |  |
-| <a name="s3_key_prefix"></a> [s3_key_prefix](#input\_s3\_key\_prefix) | An optional folder in the S3 bucket to place logs in. | `string` |  | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="cloudwatch_encryption_enabled"></a> [cloudwatch_encryption_enabled](#input\_cloudwatch\_encryption\_enabled) | Whether or not to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled. | `string` | `null` | no |
+| <a name="cloudwatch_log_group_name"></a> [cloudwatch_log_group_name](#input\_cloudwatch\_log\_group\_name) | The name of the CloudWatch log group to send logs to. | `string` |  | no |
+| <a name="s3_bucket_name"></a> [s3_bucket_name](#input\_s3\_bucket\_name) | The name of the S3 bucket to send logs to. | `string` |  | no |
+| <a name="s3_bucket_encryption_enabled"></a> [s3_bucket_encryption_enabled](#input\_s3\_bucket\_encryption\_enabled) | Whether or not to enable encryption on the logs sent to S3. If not specified, encryption will be disabled. | `bool` |  | no |
+| <a name="s3_key_prefix"></a> [s3_key_prefix](#input\_s3\_key\_prefix) | An optional folder in the S3 bucket to place logs in. | `string` |  | no |
 
 #### autoscaling_capacity_providers
 
 - Either `asg_name` of `asg_arn` is required; `asg_arn` will take preference over `asg_name`
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="name"></a> [name](#input\_name) | Name of the capacity provider. | `string` |  | yes |  |
-| <a name="asg_name"></a> [asg_name](#input\_asg_name) | ASG Name to be used | `string` |  | yes |  |
-| <a name="asg_arn"></a> [asg_arn](#input\_asg_arn) | ASG ARN to be used | `string` |  | yes |  |
-| <a name="managed_termination_protection"></a> [managed_termination_protection](#input\_managed_termination_protection) | Enables or disables container-aware termination of instances in the auto scaling group when scale-in happens.<br>Valid values are `ENABLED` and `DISABLED`. | `string` |  | no |  |
-| <a name="ms_instance_warmup_period"></a> [ms_instance_warmup_period](#input\_ms_instance_warmup_period) | Period of time, in seconds, after a newly launched Amazon EC2 instance can contribute to CloudWatch metrics for Auto Scaling group. | `number` | `300` | no |  |
-| <a name="ms_minimum_scaling_step_size"></a> [ms_minimum_scaling_step_size](#input\_ms_minimum_scaling_step_size) | Minimum step adjustment size. A number between 1 and 10,000. | `number` |  | no |  |
-| <a name="ms_maximum_scaling_step_size"></a> [ms_maximum_scaling_step_size](#input\_ms_maximum_scaling_step_size) | Maximum step adjustment size. A number between 1 and 10,000. | `number` |  | no |  |
-| <a name="ms_target_capacity"></a> [ms_target_capacity](#input\_ms_target_capacity) | Target utilization for the capacity provider. A number between 1 and 100. | `number` |  | no |  |
-| <a name="ms_status"></a> [ms_status](#input\_ms_status) | Whether auto scaling is managed by ECS. | `string` |  | no |  |
-| <a name="default_strategy"></a> [default_strategy](#input\_default_strategy) | Default strategy for provider (It should be a map of values with the keys `base` and `weight` ) | `map` | `{}` | no |  |
-| <a name="tags"></a> [tags](#input\_tags) | A map of tags to assign to Capacity Provider | `map` | `{}` | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="name"></a> [name](#input\_name) | Name of the capacity provider. | `string` |  | yes |
+| <a name="asg_name"></a> [asg_name](#input\_asg_name) | ASG Name to be used | `string` |  | yes |
+| <a name="asg_arn"></a> [asg_arn](#input\_asg_arn) | ASG ARN to be used | `string` |  | yes |
+| <a name="managed_termination_protection"></a> [managed_termination_protection](#input\_managed_termination_protection) | Enables or disables container-aware termination of instances in the auto scaling group when scale-in happens.<br>Valid values are `ENABLED` and `DISABLED`. | `string` |  | no |
+| <a name="ms_instance_warmup_period"></a> [ms_instance_warmup_period](#input\_ms_instance_warmup_period) | Period of time, in seconds, after a newly launched Amazon EC2 instance can contribute to CloudWatch metrics for Auto Scaling group. | `number` | `300` | no |
+| <a name="ms_minimum_scaling_step_size"></a> [ms_minimum_scaling_step_size](#input\_ms_minimum_scaling_step_size) | Minimum step adjustment size. A number between 1 and 10,000. | `number` |  | no |
+| <a name="ms_maximum_scaling_step_size"></a> [ms_maximum_scaling_step_size](#input\_ms_maximum_scaling_step_size) | Maximum step adjustment size. A number between 1 and 10,000. | `number` |  | no |
+| <a name="ms_target_capacity"></a> [ms_target_capacity](#input\_ms_target_capacity) | Target utilization for the capacity provider. A number between 1 and 100. | `number` |  | no |
+| <a name="ms_status"></a> [ms_status](#input\_ms_status) | Whether auto scaling is managed by ECS. | `string` |  | no |
+| <a name="default_strategy"></a> [default_strategy](#input\_default_strategy) | Default strategy for provider (It should be a map of values with the keys `base` and `weight` ) | `map` | `{}` | no |
+| <a name="tags"></a> [tags](#input\_tags) | A map of tags to assign to Capacity Provider | `map` | `{}` | no |
 
 #### service_scalability
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="min_capacity"></a> [min_capacity](#input\_min\_capacity) | Min capacity of the scalable target. | `number` | `1` | no |  |
-| <a name="max_capacity"></a> [max_capacity](#input\_max\_capacity) | Max capacity of the scalable target. | `number` | Value of `min_capacity` | no |  |
-| <a name="desired_capacity"></a> [desired_capacity](#input\_desired\_capacity) | Number of instances of the task definition to place and keep running. | `number` | Value of `min_capacity` | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="min_capacity"></a> [min_capacity](#input\_min\_capacity) | Min capacity of the scalable target. | `number` | `1` | no |
+| <a name="max_capacity"></a> [max_capacity](#input\_max\_capacity) | Max capacity of the scalable target. | `number` | Value of `min_capacity` | no |
+| <a name="desired_capacity"></a> [desired_capacity](#input\_desired\_capacity) | Number of instances of the task definition to place and keep running. | `number` | Value of `min_capacity` | no |
 
 #### service_volumes
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="name"></a> [name](#input\_name) | Name of the volume. | `string` |  | yes |  |
-| <a name="host_path"></a> [host_path](#host\_path) | Path on the host container instance that is presented to the container. | `string` |  | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="name"></a> [name](#input\_name) | Name of the volume. | `string` |  | yes |
+| <a name="host_path"></a> [host_path](#host\_path) | Path on the host container instance that is presented to the container. | `string` |  | no |
 
 #### container_configurations
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="name"></a> [name](#input\_name) | The name of the container | `string` |  | yes |  |
-| <a name="image"></a> [image](#input\_image) | Docker Image to be deployed in the container | `string` |  | yes |  |
-| <a name="container_port"></a> [container_port](#input\_container_port) | Container Port | `number` |  | yes |  |
-| <a name="host_port"></a> [host_port](#input\_host_port) | Host Port | `number` |  | yes |  |
-| <a name="cpu"></a> [cpu](#input\_cpu) | CPU assigned to container | `number` |  | yes |  |
-| <a name="memory"></a> [memory](#input\_memory) | Memory assigned to container | `number` |  | yes |  |
-| <a name="log_group"></a> [log_group](#input\_log_group) | Cloudwatch log group for the logs to be sent to | `string` |  | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="name"></a> [name](#input\_name) | The name of the container | `string` |  | yes |
+| <a name="image"></a> [image](#input\_image) | Docker Image to be deployed in the container | `string` |  | yes |
+| <a name="container_port"></a> [container_port](#input\_container_port) | Container Port | `number` |  | yes |
+| <a name="host_port"></a> [host_port](#input\_host_port) | Host Port | `number` |  | yes |
+| <a name="cpu"></a> [cpu](#input\_cpu) | CPU assigned to container | `number` |  | yes |
+| <a name="memory"></a> [memory](#input\_memory) | Memory assigned to container | `number` |  | yes |
+| <a name="log_group"></a> [log_group](#input\_log_group) | Cloudwatch log group for the logs to be sent to | `string` |  | no |
 
 #### policy
 
@@ -207,19 +207,19 @@ Policy content to be add to the new policy (i.e. the policy for which arn is not
 &nbsp;&nbsp;&nbsp;- JSON document must be placed in the directory `policies` under root directory.<br>
 &nbsp;&nbsp;&nbsp;- The naming format of the file: <Value set in `name` property>.json
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="name"></a> [name](#input\_name) | The name of the policy. | `string` | `yes` | yes |  |
-| <a name="description"></a> [description](#input\_description) | Description of the IAM policy. | `string` | `<name of the policy>` | no |  |
-| <a name="path"></a> [path](#input\_path) | Path in which to create the policy. | `string` | `"/"` | no |  |
-| <a name="tags"></a> [tags](#input\_tags) | A map of tags to assign to the policy. | `map` | `{}` | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="name"></a> [name](#input\_name) | The name of the policy. | `string` | `yes` | yes |
+| <a name="description"></a> [description](#input\_description) | Description of the IAM policy. | `string` | `<name of the policy>` | no |
+| <a name="path"></a> [path](#input\_path) | Path in which to create the policy. | `string` | `"/"` | no |
+| <a name="tags"></a> [tags](#input\_tags) | A map of tags to assign to the policy. | `map` | `{}` | no |
 
 #### ecs_policy
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="name"></a> [name](#input\_name) | Policy Name | `string` |  | yes |  |
-| <a name="arn"></a> [arn](#input\_arn) | Policy ARN (if existing policy) | `string` |  | no |  |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="name"></a> [name](#input\_name) | Policy Name | `string` |  | yes |
+| <a name="arn"></a> [arn](#input\_arn) | Policy ARN (if existing policy) | `string` |  | no |
 
 #### sg_rules 
 [ Ingress / Egress ]
@@ -229,17 +229,17 @@ Policy content to be add to the new policy (i.e. the policy for which arn is not
 - `source_security_group_id` Cannot be specified with `cidr_blocks`, `ipv6_cidr_blocks` or `self`.
 - `self` Cannot be specified with `cidr_blocks`, `ipv6_cidr_blocks` or `source_security_group_id`.
 
-| Name | Description | Type | Default | Required | Example|
-|:------|:------|:------|:------|:------:|:------|
-| <a name="rule_name"></a> [rule_name](#input\_rule\_name) | The name of the Rule (Used for terraform perspective to maintain unicity) | `string` |  | yes | |
-| <a name="description"></a> [description](#input\_description) | Description of the rule. | `string` |  | yes | |
-| <a name="from_port"></a> [from_port](#input\_from\_port) | Start port (or ICMP type number if protocol is "icmp" or "icmpv6"). | `number` |  | yes | |
-| <a name="to_port"></a> [to_port](#input\_to\_port) | End port (or ICMP code if protocol is "icmp"). | `number` |  | yes | |
-| <a name="protocol"></a> [protocol](#input\_protocol) | Protocol. If not icmp, icmpv6, tcp, udp, or all use the protocol number | `string | number` |  | yes | |
-| <a name="self"></a> [self](#input\_self) | Whether the security group itself will be added as a source to this ingress rule.  | `bool` |  | no | |
-| <a name="cidr_blocks"></a> [cidr_blocks](#input\_cidr\_blocks) | List of IPv4 CIDR blocks | `list(string)` |  | no | |
-| <a name="ipv6_cidr_blocks"></a> [ipv6_cidr_blocks](#input\_ipv6\_cidr\_blocks) | List of IPv6 CIDR blocks. | `list(string)` |  | no | |
-| <a name="source_security_group_id"></a> [source_security_group_id](#input\_source\_security\_group\_id) | Security group id to allow access to/from | `string` |  | no | |
+| Name | Description | Type | Default | Required |
+|:------|:------|:------|:------|:------:|
+| <a name="rule_name"></a> [rule_name](#input\_rule\_name) | The name of the Rule (Used for terraform perspective to maintain unicity) | `string` |  | yes |
+| <a name="description"></a> [description](#input\_description) | Description of the rule. | `string` |  | yes |
+| <a name="from_port"></a> [from_port](#input\_from\_port) | Start port (or ICMP type number if protocol is "icmp" or "icmpv6"). | `number` |  | yes |
+| <a name="to_port"></a> [to_port](#input\_to\_port) | End port (or ICMP code if protocol is "icmp"). | `number` |  | yes |
+| <a name="protocol"></a> [protocol](#input\_protocol) | Protocol. If not icmp, icmpv6, tcp, udp, or all use the protocol number | `string \| number` |  | yes |
+| <a name="self"></a> [self](#input\_self) | Whether the security group itself will be added as a source to this ingress rule.  | `bool` |  | no |
+| <a name="cidr_blocks"></a> [cidr_blocks](#input\_cidr\_blocks) | List of IPv4 CIDR blocks | `list(string)` |  | no |
+| <a name="ipv6_cidr_blocks"></a> [ipv6_cidr_blocks](#input\_ipv6\_cidr\_blocks) | List of IPv6 CIDR blocks. | `list(string)` |  | no |
+| <a name="source_security_group_id"></a> [source_security_group_id](#input\_source\_security\_group\_id) | Security group id to allow access to/from | `string` |  | no |
 
 ## Outputs
 
