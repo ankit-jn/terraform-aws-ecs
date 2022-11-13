@@ -1,8 +1,8 @@
-# ARJ-Stack: AWS ECS Terraform module
+## ARJ-Stack: AWS ECS Terraform module
 
 A Terraform module for configuring ECS Cluster and ECS Services
 
-## Resources
+### Resources
 This module features the following components to be provisioned with different combinations:
 
 - ECS Cluster [[aws_ecs_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster)]
@@ -32,14 +32,14 @@ This module features the following components to be provisioned with different c
 - IAM Roles-Policy Attachments [[aws_iam_role_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment)]
 
 
-## Requirements
+### Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.2.5 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.22.0 |
 
-## Providers
+### Providers
 
 | Name | Version |
 |------|---------|
@@ -49,7 +49,7 @@ This module features the following components to be provisioned with different c
 
 Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-examples/tree/main/aws-ecs) for effectively utilizing this module.
 
-## Inputs
+### Inputs
 
 #### ECS Cluster Specific Properties
 ---
@@ -137,7 +137,7 @@ Refer [Configuration Examples](https://github.com/arjstack/terraform-aws-example
 |:------|:------|:------|:------|:------:|
 | <a name="default_tags"></a> [default_tags](#input\_default\_tags) | A map of tags to assign to all the resource. | `map` | `{}` | no |
 
-## Nested Configuration Maps:  
+### Nested Configuration Maps:  
 
 #### execute_command_configurations
 
@@ -241,7 +241,7 @@ Policy content to be add to the new policy (i.e. the policy for which arn is not
 | <a name="ipv6_cidr_blocks"></a> [ipv6_cidr_blocks](#input\_ipv6\_cidr\_blocks) | List of IPv6 CIDR blocks. | `list(string)` |  | no |
 | <a name="source_security_group_id"></a> [source_security_group_id](#input\_source\_security\_group\_id) | Security group id to allow access to/from | `string` |  | no |
 
-## Outputs
+### Outputs
 
 | Name | Type | Description |
 |:------|:------|:------|
@@ -258,7 +258,7 @@ Policy content to be add to the new policy (i.e. the policy for which arn is not
 | <a name="service_discovery_arn"></a> [service_discovery_arn](#output\_service\_discovery\_arn) | `string` | ARN of Service Discovery |
 | <a name="sg_id"></a> [sg_id](#output\_sg\_id) | `string` | The Security Group ID associated to ECS service/task |
 
-## Authors
+### Authors
 
 Module is maintained by [Ankit Jain](https://github.com/ankit-jn) with help from [these professional](https://github.com/arjstack/terraform-aws-ecs/graphs/contributors).
 
