@@ -25,6 +25,13 @@ module "iam_ecs" {
     
     policies = var.policies
     service_linked_roles = local.ecs_task_roles
+
+    policy_default_tags = merge({ "ECSCluster" = var.cluster_name }, 
+                                    { "ECSService" = var.service_name },
+                                    var.default_tags)
+    role_default_tags = merge({ "ECSCluster" = var.cluster_name }, 
+                                    { "ECSService" = var.service_name },
+                                    var.default_tags)
 }
 
 ## Create Service Discovery Private DNS Namespace.
@@ -48,6 +55,11 @@ module "ecs_security_group" {
 
     ingress_rules = local.sg_ingress_rules
     egress_rules  = local.sg_egress_rules
+
+    tags = merge({"Name" = var.sg_name}, 
+                    { "ECSCluster" = var.cluster_name }, 
+                    { "ECSService" = var.service_name }, 
+                    var.default_tags)
 }
 
 ## ECS Service
@@ -99,5 +111,5 @@ module "ecs_service" {
     namespace_id                = local.namespace_id
     routing_policy              = var.routing_policy
     ## Tags
-    default_tags = var.default_tags
+    default_tags = merge({ "ECSCluster" = var.cluster_name }, var.default_tags)
 }

@@ -41,10 +41,9 @@ resource aws_ecs_task_definition "this" {
       }
     }
     
-    tags = merge(
-      { "Name" = "svc-${var.service_name}-task" },
-      var.default_tags
-    )
+    tags = merge({ "Name" = "svc-${var.service_name}-task" },
+                      { "ECSService" = var.service_name },
+                      var.default_tags)
 
     lifecycle {
       create_before_destroy = true
@@ -108,9 +107,8 @@ resource aws_cloudwatch_log_group "this" {
 
     retention_in_days = var.log_group_retention
 
-    tags = merge(
-      { "Name" = "logs-svc-${var.service_name}" },
-      var.default_tags
-    )
+    tags = merge({ "Name" = "logs-svc-${var.service_name}" },
+                    { "ECSService" = var.service_name },
+                    var.default_tags)
 }
 
