@@ -210,7 +210,7 @@ variable "container_definition" {
 variable "policies" {
   description = <<EOF
 List of Policies to be provisioned where each entry will be a map for Policy configuration
-Refer https://github.com/arjstack/terraform-aws-iam#policy for the structure
+Refer https://github.com/ankit-jn/terraform-aws-iam#policy for the structure
 EOF
   default = []
 }
